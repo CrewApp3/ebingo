@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>BahnCenter &mdash; EB Ostthüringennetz</title>
+  <style>
+    :root {
+      --bg:       #0f1117;
+      --surface:  #1a1d27;
+      --surface2: #222535;
+      --border:   #2e3248;
+      --green:    #3cb85a;
+      --red:      #e31e24;
+      --text:     #e8eaf0;
+      --muted:    #8b90a8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .site-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .logo-eb {
+      font-size: 2rem;
+      font-weight: 900;
+      background: linear-gradient(to right, var(--green), #b82020);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -1.5px;
+      line-height: 1;
+    }
+    .logo-dot {
+      width: 8px; height: 8px;
+      background: var(--red);
+      border-radius: 50%;
+      margin-bottom: 3px;
+      flex-shrink: 0;
+    }
+    .site-name  { font-size: 1.05rem; font-weight: 600; }
+    .site-sub   { font-size: 0.8rem; color: var(--muted); margin-top: 1px; }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+      gap: 2.5rem;
+    }
+
+    .portal-heading { text-align: center; }
+    .portal-heading h1 {
+      font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.5rem;
+    }
+    .portal-heading h1 span {
+      background: linear-gradient(to right, var(--green), #b82020);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .portal-heading p { color: var(--muted); font-size: 0.95rem; }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .app-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 1.75rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .app-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 16px 16px 0 0;
+    }
+    .app-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+    }
+    .app-card.bingo::before { background: var(--green); }
+    .app-card.bingo:hover   { border-color: var(--green); }
+    .app-card.codes::before { background: var(--red); }
+    .app-card.codes:hover   { border-color: var(--red); }
+
+    .card-icon  { font-size: 2.5rem; line-height: 1; }
+    .card-title { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.3px; }
+    .app-card.bingo .card-title { color: var(--green); }
+    .app-card.codes .card-title { color: var(--red); }
+
+    .card-desc {
+      font-size: 0.88rem; color: var(--muted); line-height: 1.55; flex: 1;
+    }
+    .card-arrow {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.82rem; font-weight: 600; color: var(--muted);
+      transition: color 0.15s, gap 0.15s;
+    }
+    .app-card:hover .card-arrow            { gap: 0.65rem; }
+    .app-card.bingo:hover .card-arrow      { color: var(--green); }
+    .app-card.codes:hover  .card-arrow     { color: var(--red); }
+
+    footer {
+      text-align: center;
+      padding: 1.25rem;
+      color: var(--muted);
+      font-size: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+    footer span { color: var(--green); font-weight: 600; }
+
+    @media (max-width: 480px) {
+      .site-header { padding: 0.85rem 1rem; }
+      main { padding: 2rem 1rem; }
+      .portal-heading h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <span class="logo-eb">EB</span>
+  <span class="logo-dot"></span>
+  <div>
+    <div class="site-name">BahnCenter</div>
+    <div class="site-sub">Ostth&uuml;ringennetz &mdash; Intern</div>
+  </div>
+</header>
+
+<main>
+  <div class="portal-heading">
+    <h1>Willkommen im <span>BahnCenter</span></h1>
+    <p>W&auml;hle eine App um loszulegen</p>
+  </div>
+
+  <div class="app-grid">
+
+    <a class="app-card bingo" href="bingo.html">
+      <div class="card-icon">&#x1F3B0;</div>
+      <div class="card-title">EBingo</div>
+      <div class="card-desc">
+        Interaktives Bingo f&uuml;r TF und ZUB &mdash;
+        zuf&auml;llige Karten, anklicken, drucken oder als Bild speichern.
+      </div>
+      <div class="card-arrow">Zur App &#x2192;</div>
+    </a>
+
+    <a class="app-card codes" href="liniencodes.html">
+      <div class="card-icon">&#x1F686;</div>
+      <div class="card-title">Liniencodes OTN</div>
+      <div class="card-desc">
+        FIS-Taufe im Offlinemodus &mdash; alle Liniencodes, Zugzielliste
+        und FIS-Tastenbelegung f&uuml;r das Ostth&uuml;ringennetz. Stand 02/2026.
+      </div>
+      <div class="card-arrow">Zur App &#x2192;</div>
+    </a>
+
+  </div>
+</main>
+
+<footer>
+  <span>EB</span> BahnCenter &mdash; Ostth&uuml;ringennetz &mdash; Nur f&uuml;r den internen Gebrauch
+</footer>
+
+</body>
+</html>
