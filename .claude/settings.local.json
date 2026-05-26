@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(cd \"c:\\\\Users\\\\tryhq\\\\Desktop\\\\Shortcuts\\\\EBingo\"; $encrypted = node encrypt.js \"EB-OTN-2026\"; Write-Output \"LENGTH: $\\($encrypted.Length\\)\"; Write-Output \"PREVIEW: $\\($encrypted.Substring\\(0,60\\)\\)...\")",
+      "PowerShell(cd \"c:\\\\Users\\\\tryhq\\\\Desktop\\\\Shortcuts\\\\EBingo\"; $encrypted = node encrypt.js \"EB-OTN-2026\"; $encrypted | Out-File -FilePath \"encrypted_data.txt\" -Encoding utf8 -NoNewline; Write-Output \"Saved $\\($encrypted.Length\\) chars\")",
+      "PowerShell(cd \"c:\\\\Users\\\\tryhq\\\\Desktop\\\\Shortcuts\\\\EBingo\"; $enc = Get-Content \"encrypted_data.txt\" -Raw; $enc.Trim\\(\\))",
+      "PowerShell(cd \"c:\\\\Users\\\\tryhq\\\\Desktop\\\\Shortcuts\\\\EBingo\"; $content = Get-Content index.html -Raw; $hasPlaceholder = $content.Contains\\('%%CIPHERTEXT%%'\\); $hasCipher = $content.Contains\\('U2FsdGVkX1'\\); $hasRobots = $content.Contains\\('noindex'\\); Write-Output \"Placeholder replaced: $\\(-not $hasPlaceholder\\)\"; Write-Output \"Has cipher: $hasCipher\"; Write-Output \"Has noindex: $hasRobots\"; Write-Output \"File size: $\\($content.Length\\) chars\")",
+      "PowerShell(cd \"c:\\\\Users\\\\tryhq\\\\Desktop\\\\Shortcuts\\\\EBingo\"; Get-ChildItem | Select-Object Name, @{N='Size';E={if\\($_.PSIsContainer\\){'<dir>'}else{\"$\\([math]::Round\\($_.Length/1KB,1\\)\\) KB\"}}} | Format-Table -AutoSize)",
+      "PowerShell(cd \"c:\\\\Users\\\\tryhq\\\\Desktop\\\\Shortcuts\\\\EBingo\"; $cryptoSize = \\(Get-Item \"node_modules\\\\crypto-js\\\\crypto-js.js\"\\).Length; Write-Output \"crypto-js.js size: $\\([math]::Round\\($cryptoSize/1KB\\)\\) KB\")",
+      "PowerShell(cd \"c:\\\\Users\\\\tryhq\\\\Desktop\\\\Shortcuts\\\\EBingo\"; $minified = \\(Get-Item \"node_modules\\\\crypto-js\\\\crypto-js.min.js\"\\).Length; Write-Output \"minified: $\\([math]::Round\\($minified/1KB\\)\\) KB\")",
+      "PowerShell(cd \"c:\\\\Users\\\\tryhq\\\\Desktop\\\\Shortcuts\\\\EBingo\"; $files = @\\('index.html','liniencodes.html','bingo.html','robots.txt'\\); foreach \\($f in $files\\) { $c = Get-Content $f -Raw; $robots = $c -match 'noindex'; $size = [math]::Round\\($c.Length/1KB,1\\); Write-Output \"$f | $size KB | robots=$robots\" })",
+      "PowerShell(Get-ChildItem \"c:\\\\Users\\\\tryhq\\\\Desktop\\\\Shortcuts\\\\EBingo\\\\img\" | Select-Object Name, @{N='KB';E={[math]::Round\\($_.Length/1KB,1\\)}})",
+      "PowerShell(Get-ChildItem \"c:\\\\Users\\\\tryhq\\\\Desktop\\\\Shortcuts\\\\EBingo\" -Recurse | Where-Object { $_.Extension -match '\\\\.\\(png|jpg|jpeg|gif|svg|webp\\)' } | Select-Object FullName, Length)",
+      "PowerShell(cd \"c:\\\\Users\\\\tryhq\\\\Desktop\\\\Shortcuts\\\\EBingo\"; $html = Get-Content liniencodes.html -Raw; Write-Host \"Has login overlay:\" \\($html -match 'login-overlay'\\); Write-Host \"Has CIPHER var:\" \\($html -match \"var CIPHER = '\"\\); Write-Host \"Has raw Gera in data section:\" \\($html -match '\"name\":\"Gera\"'\\); Write-Host \"Has CryptoJS:\" \\($html -match 'CryptoJS'\\))",
+      "Bash(git push *)",
+      "Bash(git fetch *)"
+    ]
+  }
+}

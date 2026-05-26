@@ -1,0 +1,8 @@
+# Build source — never upload to GitHub
+data.js
+build.js
+encrypt.js
+template.html
+package.json
+package-lock.json
+node_modules/
