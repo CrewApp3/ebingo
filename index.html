@@ -11,8 +11,8 @@
       --surface:  #1a1d27;
       --surface2: #222535;
       --border:   #2e3248;
-      --green:    #3cb85a;
-      --red:      #e31e24;
+      --green:    #3b82f6;
+      --red:      #f59e0b;
       --text:     #e8eaf0;
       --muted:    #8b90a8;
     }
@@ -37,7 +37,7 @@
     .logo-eb {
       font-size: 2rem;
       font-weight: 900;
-      background: linear-gradient(to right, var(--green), #b82020);
+      background: linear-gradient(to right, var(--green), #7c3aed);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -69,7 +69,7 @@
       font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.5rem;
     }
     .portal-heading h1 span {
-      background: linear-gradient(to right, var(--green), #b82020);
+      background: linear-gradient(to right, var(--green), #7c3aed);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -78,7 +78,7 @@
 
     .app-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 1.25rem;
       width: 100%;
       max-width: 700px;
@@ -142,15 +142,25 @@
 
     @media (max-width: 480px) {
       .site-header { padding: 0.85rem 1rem; }
+      .logo-eb { font-size: 1.4rem; }
+      .site-header > span:first-child { font-size: 1.4rem !important; }
       main { padding: 2rem 1rem; }
       .portal-heading h1 { font-size: 1.5rem; }
+      .app-card { padding: 1.25rem 1.25rem; }
+      .card-title { font-size: 1.1rem; }
+      .card-icon { font-size: 2rem; }
+    }
+    @media (max-width: 360px) {
+      .site-sub { display: none; }
+      .logo-dot { display: none; }
+      .app-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
 <header class="site-header">
-  <span class="logo-eb">EB</span>
+  <span style="font-size:2rem;line-height:1;">🚂</span><span class="logo-eb">BC</span>
   <span class="logo-dot"></span>
   <div>
     <div class="site-name">BahnCenter</div>
@@ -160,7 +170,7 @@
 
 <main>
   <div class="portal-heading">
-    <h1>Willkommen im <span>BahnCenter</span></h1>
+    <h1>Willkommen im 🚂<span>BahnCenter</span></h1>
     <p>W&auml;hle eine App um loszulegen</p>
   </div>
 
@@ -168,7 +178,7 @@
 
     <a class="app-card bingo" href="bingo.html">
       <div class="card-icon">&#x1F3B0;</div>
-      <div class="card-title">EBingo</div>
+      <div class="card-title">Eisenbahnerbingo</div>
       <div class="card-desc">
         Interaktives Bingo f&uuml;r TF und ZUB &mdash;
         zuf&auml;llige Karten, anklicken, drucken oder als Bild speichern.
@@ -190,7 +200,7 @@
 </main>
 
 <footer>
-  <span>EB</span> BahnCenter &mdash; Ostth&uuml;ringennetz &mdash; Nur f&uuml;r den internen Gebrauch 
+  <span>BC</span> BahnCenter &mdash; Ostth&uuml;ringennetz &mdash; Nur f&uuml;r den internen Gebrauch 
 </footer>
 
 </body>

@@ -11,24 +11,24 @@
       --surface:  #1a1d27;
       --surface2: #222535;
       --border:   #2e3248;
-      --green:    #3cb85a;
-      --red:      #e31e24;
+      --green:    #3b82f6;
+      --red:      #f59e0b;
       --text:     #e8eaf0;
       --muted:    #8b90a8;
       --gold:     #c8a000;
 
-      --rb13: #ff6b35;
-      --rb22: #e31e24;
-      --re12: #c8181e;
-      --rb21: #2e9fff;
+      --rb13: #13a538;
+      --rb22: #f39200;
+      --re12: #ec6608;
+      --rb21: #e30613;
       --re21: #2e9fff;
-      --rb23: #9b59b6;
-      --rb26: #17a8c0;
+      --rb23: #0097d7;
+      --rb26: #365c17;
       --rb27: #3cb85a;
-      --rb28: #f0922a;
-      --rb32: #e05555;
-      --rb76: #a855c8;
-      --rb46: #1eaa99;
+      --rb28: #13a538;
+      --rb32: #e30613;
+      --rb76: #832c87;
+      --rb46: #13a538;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -58,7 +58,7 @@
     .header-logo-eb {
       font-size: 1.7rem;
       font-weight: 900;
-      background: linear-gradient(to right, var(--green), #b82020);
+      background: linear-gradient(to right, var(--green), #7c3aed);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -200,7 +200,7 @@
       border-top: 1px solid var(--border);
       vertical-align: middle;
     }
-    tr:hover td { background: rgba(60,184,90,0.04); }
+    tr:hover td { background: rgba(59,130,246,0.04); }
     .mono { font-family: 'Courier New', monospace; font-weight: 700; letter-spacing: 0.04em; }
     .code-cell { color: var(--gold); }
     .line-badge {
@@ -210,7 +210,7 @@
       font-size: 0.73rem; font-weight: 700;
       color: #fff; white-space: nowrap;
     }
-    mark.hl { background: rgba(227,30,36,0.28); color: inherit; border-radius: 2px; padding: 0 1px; }
+    mark.hl { background: rgba(245,158,11,0.28); color: inherit; border-radius: 2px; padding: 0 1px; }
     .no-results { text-align: center; padding: 3rem; color: var(--muted); }
     .no-results-icon { font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.5; }
 
@@ -288,7 +288,7 @@
     }
     .login-logo-eb {
       font-size: 2.5rem; font-weight: 900;
-      background: linear-gradient(to right, var(--green), #b82020);
+      background: linear-gradient(to right, var(--green), #7c3aed);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -349,7 +349,7 @@
 <div id="login-overlay">
   <div class="login-card">
     <div class="login-logo">
-      <span class="login-logo-eb">EB</span>
+      <span style="font-size:2.5rem;line-height:1;">🚂</span><span class="login-logo-eb">BC</span>
       <span class="login-logo-dot"></span>
     </div>
     <h1 class="login-title">Liniencodes OTN</h1>
@@ -365,7 +365,7 @@
 
 <header class="app-header">
   <div class="header-logo-wrap">
-    <span class="header-logo-eb">EB</span>
+    <span style="font-size:1.7rem;line-height:1;">🚂</span><span class="header-logo-eb">BC</span>
     <span class="header-logo-dot"></span>
   </div>
   <span class="header-title">FIS-Taufe &mdash; Liniencodes Ostth&uuml;ringennetz</span>
@@ -7118,10 +7118,10 @@ function doLogin(e) {
 var activeLineFilter = 'ALL';
 
 var LINE_COLORS = {
-  RB13:'#ff6b35', RB22:'#e31e24', RE12:'#c8181e',
-  RB21:'#2e9fff', RE21:'#2e9fff', RB23:'#9b59b6',
-  RB26:'#17a8c0', RB27:'#3cb85a', RB28:'#f0922a',
-  RB32:'#e05555', RB76:'#a855c8', RB46:'#1eaa99'
+  RB13:'#13a538', RB22:'#f39200', RE12:'#ec6608',
+  RB21:'#e30613', RE21:'#2e9fff', RB23:'#0097d7',
+  RB26:'#365c17', RB27:'#3cb85a', RB28:'#13a538',
+  RB32:'#e30613', RB76:'#832c87', RB46:'#13a538'
 };
 
 function getLineColor(line) {
