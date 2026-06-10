@@ -83,6 +83,9 @@
       gap: 0.6rem;
       align-items: center;
       overflow: hidden;
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     /* ── GAME ────────────────────────────────────────── */
@@ -137,9 +140,6 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      touch-action: none;
-      -webkit-user-select: none;
-      user-select: none;
     }
     #board {
       background: var(--surface);
@@ -392,6 +392,7 @@
       <button class="howto-tab" id="howto-tab-desktop" data-tab="desktop">&#x1F4BB; Desktop</button>
     </div>
     <div class="howto-panel" data-panel="mobile" hidden>
+      <p style="color:var(--muted);font-size:0.85rem;margin-bottom:0.5rem;">Steuerung funktioniert &uuml;berall auf dem Bildschirm &mdash; auch unterhalb des Spielfelds.</p>
       <ul class="howto-list">
         <li><span class="howto-key">&#x2194;</span> Wischen &mdash; Stein bewegen</li>
         <li><span class="howto-key">&#x1F446;</span> Tippen &mdash; Stein drehen</li>
@@ -1055,22 +1056,28 @@
     }
   });
 
-  // ── TOUCH / SWIPE CONTROLS ───────────────────────────
+  // ── TOUCH / SWIPE CONTROLS (whole page) ──────────────
   const boardWrap = document.querySelector('.board-wrap');
   let touchStartX = 0, touchStartY = 0, touchStartTime = 0;
   let touchRefX = 0, touchRefY = 0, touchMoved = false;
+  let touchActive = false;
 
-  boardWrap.addEventListener('touchstart', function(e) {
-    if (e.touches.length !== 1) return;
+  function isControlTarget(target) {
+    return !!target.closest('.top-nav, .modal-overlay, .overlay');
+  }
+
+  document.addEventListener('touchstart', function(e) {
+    if (e.touches.length !== 1 || isControlTarget(e.target)) return;
     const t = e.touches[0];
     touchStartX = touchRefX = t.clientX;
     touchStartY = touchRefY = t.clientY;
     touchStartTime = Date.now();
     touchMoved = false;
+    touchActive = true;
   }, { passive: true });
 
-  boardWrap.addEventListener('touchmove', function(e) {
-    if (e.touches.length !== 1) return;
+  document.addEventListener('touchmove', function(e) {
+    if (!touchActive || e.touches.length !== 1) return;
     e.preventDefault();
     const t = e.touches[0];
 
@@ -1086,7 +1093,9 @@
     if (t.clientY - touchRefY < step) touchRefY = Math.min(touchRefY, t.clientY);
   }, { passive: false });
 
-  boardWrap.addEventListener('touchend', function(e) {
+  document.addEventListener('touchend', function(e) {
+    if (!touchActive) return;
+    touchActive = false;
     if (gameOver || paused) return;
     const t = e.changedTouches[0];
     const dx = t.clientX - touchStartX;
