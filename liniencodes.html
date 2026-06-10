@@ -42,7 +42,8 @@
     .app-header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 0.85rem 1.5rem;
+      padding: 0.6rem 1.5rem;
+      min-height: 52px;
       display: flex;
       align-items: center;
       gap: 1rem;
@@ -56,7 +57,7 @@
       gap: 0.5rem;
     }
     .header-logo-eb {
-      font-size: 1.7rem;
+      font-size: 1.5rem;
       font-weight: 900;
       background: linear-gradient(to right, var(--green), #7c3aed);
       -webkit-background-clip: text;
@@ -181,9 +182,11 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
-      overflow: hidden;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
     }
-    table { width: 100%; border-collapse: collapse; }
+    table { width: 100%; min-width: 680px; border-collapse: collapse; }
     thead { background: var(--surface2); }
     th {
       padding: 0.7rem 1rem;
@@ -336,10 +339,11 @@
     ::-webkit-scrollbar-thumb:hover { background: var(--border); }
 
     @media (max-width: 640px) {
-      .app-header { padding: 0.7rem 1rem; }
+      .app-header { padding: 0.5rem 1rem; min-height: 46px; }
       .main-content { padding: 0.9rem; }
       .header-title { display: none; }
       th, td { padding: 0.55rem 0.55rem; font-size: 0.8rem; }
+      .dest-grid, .fis-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -365,7 +369,7 @@
 
 <header class="app-header">
   <div class="header-logo-wrap">
-    <span style="font-size:1.7rem;line-height:1;">🚂</span><span class="header-logo-eb">BC</span>
+    <span style="font-size:1.5rem;line-height:1;">🚂</span><span class="header-logo-eb">BC</span>
     <span class="header-logo-dot"></span>
   </div>
   <span class="header-title">FIS-Taufe &mdash; Liniencodes Ostth&uuml;ringennetz</span>

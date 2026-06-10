@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-  <title>BahnCenter &mdash; EB Ostthüringennetz</title>
+  <title>BahnCenter &mdash; Ostthüringennetz</title>
   <style>
     :root {
       --bg:       #0f1117;
@@ -13,6 +13,7 @@
       --border:   #2e3248;
       --green:    #3b82f6;
       --red:      #f59e0b;
+      --purple:   #7c3aed;
       --text:     #e8eaf0;
       --muted:    #8b90a8;
     }
@@ -29,13 +30,14 @@
     .site-header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 1rem 2rem;
+      padding: 0.6rem 1.5rem;
+      min-height: 52px;
       display: flex;
       align-items: center;
       gap: 0.75rem;
     }
     .logo-eb {
-      font-size: 2rem;
+      font-size: 1.5rem;
       font-weight: 900;
       background: linear-gradient(to right, var(--green), #7c3aed);
       -webkit-background-clip: text;
@@ -51,8 +53,8 @@
       margin-bottom: 3px;
       flex-shrink: 0;
     }
-    .site-name  { font-size: 1.05rem; font-weight: 600; }
-    .site-sub   { font-size: 0.8rem; color: var(--muted); margin-top: 1px; }
+    .site-name  { font-size: 0.95rem; font-weight: 600; }
+    .site-sub   { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
 
     main {
       flex: 1;
@@ -96,6 +98,7 @@
       gap: 1rem;
       position: relative;
       overflow: hidden;
+      cursor: pointer;
       transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
     }
     .app-card::before {
@@ -113,11 +116,28 @@
     .app-card.bingo:hover   { border-color: var(--green); }
     .app-card.codes::before { background: var(--red); }
     .app-card.codes:hover   { border-color: var(--red); }
+    .app-card.tetris::before { background: var(--purple); }
+    .app-card.tetris:hover   { border-color: var(--purple); }
+    .app-card.games::before { background: linear-gradient(to right, var(--green), var(--purple)); }
+    .app-card.games:hover   { border-color: var(--purple); }
 
     .card-icon  { font-size: 2.5rem; line-height: 1; }
+    .card-title-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
     .card-title { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.3px; }
     .app-card.bingo .card-title { color: var(--green); }
     .app-card.codes .card-title { color: var(--red); }
+    .app-card.tetris .card-title { color: var(--purple); }
+    .app-card.games .card-title {
+      background: linear-gradient(to right, var(--green), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .card-version {
+      font-size: 0.7rem; font-weight: 700; color: var(--muted);
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 999px; padding: 0.1rem 0.55rem;
+    }
 
     .card-desc {
       font-size: 0.88rem; color: var(--muted); line-height: 1.55; flex: 1;
@@ -130,6 +150,66 @@
     .app-card:hover .card-arrow            { gap: 0.65rem; }
     .app-card.bingo:hover .card-arrow      { color: var(--green); }
     .app-card.codes:hover  .card-arrow     { color: var(--red); }
+    .app-card.tetris:hover .card-arrow     { color: var(--purple); }
+    .app-card.games:hover .card-arrow      { color: var(--purple); }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 9, 14, 0.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      z-index: 1000;
+    }
+    .modal-overlay.visible { display: flex; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .modal-header h2 {
+      font-size: 1.25rem; font-weight: 800; letter-spacing: -0.3px;
+    }
+    .modal-close {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 8px;
+      width: 36px; height: 36px;
+      flex-shrink: 0;
+      font-size: 1rem;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .modal-close:hover { color: var(--text); border-color: var(--muted); }
+    .modal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .modal-grid .app-card { padding: 1.5rem 1.5rem; }
+    .modal-grid .app-card:hover { transform: none; }
 
     footer {
       text-align: center;
@@ -141,17 +221,20 @@
     footer span { color: var(--green); font-weight: 600; }
 
     @media (max-width: 480px) {
-      .site-header { padding: 0.85rem 1rem; }
-      .logo-eb { font-size: 1.4rem; }
-      .site-header > span:first-child { font-size: 1.4rem !important; }
+      .site-header { padding: 0.5rem 1rem; min-height: 46px; }
+      .logo-eb { font-size: 1.2rem; }
+      .site-header > span:first-child { font-size: 1.2rem !important; }
+      .site-sub { display: none; }
       main { padding: 2rem 1rem; }
       .portal-heading h1 { font-size: 1.5rem; }
       .app-card { padding: 1.25rem 1.25rem; }
       .card-title { font-size: 1.1rem; }
       .card-icon { font-size: 2rem; }
+      .modal { padding: 1.1rem; border-radius: 12px; gap: 1rem; }
+      .modal-header h2 { font-size: 1.05rem; }
+      .modal-grid .app-card { padding: 1.25rem 1.25rem; }
     }
     @media (max-width: 360px) {
-      .site-sub { display: none; }
       .logo-dot { display: none; }
       .app-grid { grid-template-columns: 1fr; }
     }
@@ -160,7 +243,7 @@
 <body>
 
 <header class="site-header">
-  <span style="font-size:2rem;line-height:1;">🚂</span><span class="logo-eb">BC</span>
+  <span style="font-size:1.5rem;line-height:1;">🚂</span><span class="logo-eb">BC</span>
   <span class="logo-dot"></span>
   <div>
     <div class="site-name">BahnCenter</div>
@@ -176,19 +259,25 @@
 
   <div class="app-grid">
 
-    <a class="app-card bingo" href="bingo.html">
-      <div class="card-icon">&#x1F3B0;</div>
-      <div class="card-title">Eisenbahnerbingo</div>
-      <div class="card-desc">
-        Interaktives Bingo f&uuml;r TF und ZUB &mdash;
-        zuf&auml;llige Karten, anklicken, drucken oder als Bild speichern.
+    <div class="app-card games" role="button" tabindex="0" id="games-card">
+      <div class="card-icon">&#x1F3AE;</div>
+      <div class="card-title-row">
+        <div class="card-title">Bahnspiele</div>
+        <span class="card-version">2 Spiele</span>
       </div>
-      <div class="card-arrow">Zur App &#x2192;</div>
-    </a>
+      <div class="card-desc">
+        Kurzweil f&uuml;r die Pause &mdash; Eisenbahnerbingo
+        und Shuttletetris im Bahn-Design.
+      </div>
+      <div class="card-arrow">Spiele &ouml;ffnen &#x2192;</div>
+    </div>
 
     <a class="app-card codes" href="liniencodes.html">
       <div class="card-icon">&#x1F686;</div>
-      <div class="card-title">Liniencodes OTN</div>
+      <div class="card-title-row">
+        <div class="card-title">Liniencodes OTN</div>
+        <span class="card-version">V.1</span>
+      </div>
       <div class="card-desc">
         FIS-Taufe im Offlinemodus &mdash; alle Liniencodes, Zugzielliste
         und FIS-Tastenbelegung f&uuml;r das Ostth&uuml;ringennetz. Stand 02/2026.
@@ -199,9 +288,77 @@
   </div>
 </main>
 
+<div class="modal-overlay" id="games-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>&#x1F3AE; Bahnspiele</h2>
+      <button class="modal-close" id="modal-close" aria-label="Schlie&szlig;en">&#x2715;</button>
+    </div>
+    <div class="modal-grid">
+
+      <a class="app-card bingo" href="bingo.html">
+        <div class="card-icon">&#x1F3B0;</div>
+        <div class="card-title-row">
+          <div class="card-title">Eisenbahnerbingo</div>
+          <span class="card-version">V.1.1</span>
+        </div>
+        <div class="card-desc">
+          Interaktives Bingo f&uuml;r TF und ZUB &mdash;
+          zuf&auml;llige Karten, anklicken, drucken oder als Bild speichern.
+        </div>
+        <div class="card-arrow">Zur App &#x2192;</div>
+      </a>
+
+      <a class="app-card tetris" href="tetris.html">
+        <div class="card-icon">&#x1F684;</div>
+        <div class="card-title-row">
+          <div class="card-title">Shuttletetris</div>
+          <span class="card-version">V.0.1</span>
+        </div>
+        <div class="card-desc">
+          Klassisches Tetris mit Bahn-Flair &mdash;
+          f&auml;llende Shuttle-Bl&ouml;cke (RS1, FLIRT &amp; Co.), Reihen r&auml;umen, Highscore knacken.
+        </div>
+        <div class="card-arrow">Zur App &#x2192;</div>
+      </a>
+
+    </div>
+  </div>
+</div>
+
 <footer>
-  <span>BC</span> BahnCenter &mdash; Ostth&uuml;ringennetz &mdash; Nur f&uuml;r den internen Gebrauch 
+  <span>BC</span> BahnCenter &mdash; Ostth&uuml;ringennetz &mdash; Nur f&uuml;r den internen Gebrauch
 </footer>
+
+<script>
+  var modal = document.getElementById('games-modal');
+  var gamesCard = document.getElementById('games-card');
+  var closeBtn = document.getElementById('modal-close');
+
+  function openModal() {
+    modal.classList.add('visible');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    modal.classList.remove('visible');
+    document.body.style.overflow = '';
+  }
+
+  gamesCard.addEventListener('click', openModal);
+  gamesCard.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openModal();
+    }
+  });
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) closeModal();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.classList.contains('visible')) closeModal();
+  });
+</script>
 
 </body>
 </html>
