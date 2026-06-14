@@ -78,6 +78,26 @@
     }
     .portal-heading p { color: var(--muted); font-size: 0.95rem; }
 
+    .pill-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.9rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.4rem 1rem;
+      text-decoration: none;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .pill-link:hover {
+      color: var(--text);
+      border-color: var(--green);
+    }
+
     .app-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -255,6 +275,7 @@
   <div class="portal-heading">
     <h1>Willkommen im 🚂<span>BahnCenter</span></h1>
     <p>W&auml;hle eine App um loszulegen</p>
+    <a class="pill-link" href="https://bahn.expert/" target="_blank" rel="noopener">&#x1F50D; bahn.expert</a>
   </div>
 
   <div class="app-grid">
