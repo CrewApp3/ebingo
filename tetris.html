@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <title>Shuttletetris &mdash; BahnCenter</title>
   <style>
@@ -15,7 +15,7 @@
       --green2:  #3b82f6;
       --red:     #f59e0b;
       --purple:  #7c3aed;
-      --gold:    #c8a000;
+      --gold:    #f5c518;
       --text:    #e8eaf0;
       --muted:   #8b90a8;
     }
@@ -42,6 +42,7 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
+      flex-shrink: 0;
     }
     .nav-dot {
       width: 8px; height: 8px;
@@ -59,6 +60,7 @@
       border-radius: 6px; color: var(--muted);
       text-decoration: none; font-size: 0.8rem; font-weight: 500;
       transition: border-color 0.15s, color 0.15s;
+      touch-action: manipulation;
     }
     .back-btn:hover { border-color: var(--muted); color: var(--text); }
     .top-nav .pause-btn { margin-left: auto; }
@@ -77,10 +79,10 @@
       width: 100%;
       max-width: 600px;
       margin: 0 auto;
-      padding: 0.6rem 0.75rem;
+      padding: 0.55rem 0.75rem;
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
+      gap: 0.5rem;
       align-items: center;
       overflow: hidden;
       touch-action: none;
@@ -93,7 +95,7 @@
       flex: 1;
       min-height: 0;
       width: 100%;
-      max-width: 320px;
+      max-width: 340px;
       margin: 0 auto;
       text-align: center;
       background: linear-gradient(180deg, #1c2a3a 0%, #2c4534 38%, #3c6242 72%, #4d7d4f 100%);
@@ -132,7 +134,6 @@
         linear-gradient(180deg, transparent 13px, #a3a3a3 13px, #a3a3a3 16px, transparent 16px),
         repeating-linear-gradient(90deg, #6b4226 0 6px, #5a3620 6px 8px, transparent 8px 22px);
     }
-
     .board-wrap {
       flex: 1;
       min-height: 0;
@@ -152,116 +153,105 @@
       height: auto;
     }
 
+    /* ── STATS ───────────────────────────────────────── */
     .stats-row {
       display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
+      gap: 0.4rem;
+      flex-wrap: nowrap;
       justify-content: center;
       width: 100%;
       flex-shrink: 0;
     }
     .stat-box {
-      flex: 1; min-width: 64px;
+      flex: 1;
+      min-width: 48px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 0.5rem 0.4rem;
+      padding: 0.4rem 0.3rem;
       text-align: center;
+      overflow: hidden;
     }
-    .stat-label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
-    .stat-value { font-size: 1.25rem; font-weight: 800; margin-top: 2px; }
-    .next-box { flex: 1.4; min-width: 90px; }
+    .stat-label {
+      font-size: 0.62rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    .stat-value { font-size: 1.1rem; font-weight: 800; margin-top: 2px; }
+    .next-box { flex: 1.5; min-width: 72px; }
     #next-canvas { display: block; margin: 2px auto 0; }
-    .next-name { text-align: center; font-size: 0.74rem; color: var(--muted); margin-top: 2px; font-weight: 700; }
+    .next-name { text-align: center; font-size: 0.7rem; color: var(--muted); margin-top: 2px; font-weight: 700; }
 
-    /* ── PAUSE BUTTON (NAV) ───────────────────────────── */
+    /* ── COMBO ANIMATION ────────────────────────────── */
+    @keyframes combopulse {
+      0%   { transform: scale(1.55); }
+      100% { transform: scale(1.0); }
+    }
+    #combo-box.combo-active .stat-value { color: var(--gold); }
+    #combo-box .stat-value.pulse {
+      animation: combopulse 0.22s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    /* ── PAUSE BUTTON ────────────────────────────────── */
     .pause-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 34px; height: 34px;
-      flex-shrink: 0;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      border-radius: 8px;
-      color: var(--text);
-      font-size: 1rem;
-      cursor: pointer;
-      touch-action: manipulation;
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; flex-shrink: 0;
+      border: 1px solid var(--border); background: var(--surface);
+      border-radius: 8px; color: var(--text); font-size: 1rem;
+      cursor: pointer; touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
-      user-select: none;
-      transition: background 0.1s;
+      user-select: none; transition: background 0.1s;
     }
     .pause-btn:active { background: var(--surf2); }
 
     .hint {
-      text-align: center;
-      font-size: 0.7rem;
-      color: var(--muted);
-      width: 100%;
-      flex-shrink: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      text-align: center; font-size: 0.68rem; color: var(--muted);
+      width: 100%; flex-shrink: 0;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 
-    /* ── OVERLAY ─────────────────────────────────────── */
+    /* ── IN-GAME OVERLAY ────────────────────────────── */
     .overlay {
       position: absolute; inset: 0;
-      background: rgba(15,17,23,0.88);
-      display: none;
-      flex-direction: column;
+      background: rgba(15,17,23,0.9);
+      display: none; flex-direction: column;
       align-items: center; justify-content: center;
-      text-align: center;
-      border-radius: 8px;
-      gap: 0.4rem;
-      padding: 1rem;
+      text-align: center; border-radius: 8px;
+      gap: 0.5rem; padding: 1rem;
     }
     .overlay.visible { display: flex; }
-    .overlay h2 { font-size: 1.3rem; }
-    .overlay p { font-size: 0.9rem; color: var(--muted); }
+    .overlay h2 { font-size: 1.25rem; }
+    .overlay p  { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
     .overlay button {
-      padding: 0.6rem 1.5rem;
-      border: none; border-radius: 8px;
+      padding: 0.6rem 1.5rem; border: none; border-radius: 8px;
       background: var(--purple); color: #fff;
       font-weight: 700; cursor: pointer; font-size: 0.9rem;
-      margin-top: 0.4rem;
-      touch-action: manipulation;
+      margin-top: 0.3rem; touch-action: manipulation;
     }
 
-    /* ── HOW-TO MODAL ─────────────────────────────────── */
+    /* ── HOW-TO MODAL ────────────────────────────────── */
     .modal-overlay {
       position: fixed; inset: 0;
-      background: rgba(8,9,14,0.78);
-      display: none;
-      align-items: center; justify-content: center;
-      padding: 1rem;
-      z-index: 2000;
+      background: rgba(8,9,14,0.8);
+      display: none; align-items: center; justify-content: center;
+      padding: 1rem; z-index: 2000;
     }
     .modal-overlay.visible { display: flex; }
     .modal {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.25rem;
-      width: 100%;
-      max-width: 360px;
-      max-height: 90vh;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 1.25rem;
+      width: 100%; max-width: 360px; max-height: 90vh;
+      overflow-y: auto; -webkit-overflow-scrolling: touch;
+      display: flex; flex-direction: column; gap: 1rem;
     }
-    .modal-header {
-      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-    }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
     .modal-header h2 { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.2px; }
     .modal-close {
       background: var(--surf2); border: 1px solid var(--border); color: var(--muted);
       border-radius: 8px; width: 32px; height: 32px; flex-shrink: 0;
-      font-size: 0.95rem; line-height: 1; cursor: pointer;
+      font-size: 0.95rem; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: color 0.15s, border-color 0.15s;
+      transition: color 0.15s, border-color 0.15s; touch-action: manipulation;
     }
     .modal-close:hover { color: var(--text); border-color: var(--muted); }
     .howto-tabs { display: flex; gap: 0.5rem; }
@@ -284,42 +274,49 @@
       border-radius: 6px; font-weight: 700; font-size: 0.85rem;
       flex-shrink: 0; text-align: center; white-space: nowrap;
     }
+    .howto-tip {
+      font-size: 0.78rem; color: var(--muted);
+      margin-top: 0.6rem; line-height: 1.4;
+    }
     .howto-start {
       padding: 0.65rem; border: none; border-radius: 8px;
       background: var(--purple); color: #fff; font-weight: 700; font-size: 0.95rem;
       cursor: pointer; touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
+    /* ── RESPONSIVE ──────────────────────────────────── */
     @media (max-width: 480px) {
       .top-nav { padding: 0.5rem 1rem; min-height: 46px; }
       .nav-logo { font-size: 1.2rem; }
       .top-nav > span:first-child { font-size: 1.2rem !important; }
       .nav-sub { display: none; }
-      main { padding: 0.5rem; gap: 0.5rem; }
+      main { padding: 0.4rem 0.5rem; gap: 0.4rem; }
       .board-scene { padding: 8px 8px 0; border-radius: 10px; }
-      .track { margin: 0 -8px; height: 16px; }
-      .scene-flowers { font-size: 0.8rem; letter-spacing: 0.2rem; padding: 4px 0 2px; }
-      .stat-box { min-width: 56px; padding: 0.4rem 0.3rem; }
-      .stat-value { font-size: 1.05rem; }
-      .next-box { min-width: 78px; }
-      .hint { font-size: 0.62rem; }
+      .track { margin: 0 -8px; height: 14px; }
+      .scene-flowers { font-size: 0.78rem; letter-spacing: 0.18rem; padding: 3px 0 2px; }
+      .stat-box { min-width: 40px; padding: 0.3rem 0.2rem; }
+      .stat-label { font-size: 0.58rem; }
+      .stat-value { font-size: 0.95rem; }
+      .next-box { min-width: 60px; }
+      .hint { font-size: 0.6rem; }
     }
     @media (max-width: 380px) {
       .top-nav { padding: 0.45rem 0.75rem; gap: 0.5rem; min-height: 42px; }
       .nav-name { font-size: 0.85rem; }
       .nav-dot { display: none; }
       .scene-sky { display: none; }
-      .scene-flowers { letter-spacing: 0.1rem; font-size: 0.72rem; }
-      .stat-label { font-size: 0.6rem; }
-      .stat-value { font-size: 0.95rem; }
+      .scene-flowers { letter-spacing: 0.08rem; font-size: 0.7rem; }
+      .stat-value { font-size: 0.85rem; }
       .hint { display: none; }
     }
-    @media (max-height: 560px) {
+    @media (max-height: 640px) {
       .scene-sky { display: none; }
-      .scene-flowers { font-size: 0.7rem; letter-spacing: 0.1rem; padding: 2px 0; }
+      .scene-flowers { font-size: 0.7rem; letter-spacing: 0.08rem; padding: 2px 0; }
       .track { height: 10px; }
       .hint { display: none; }
-      .stat-box { padding: 0.3rem 0.3rem; }
+      .stat-box { padding: 0.25rem 0.2rem; }
+      .stat-value { font-size: 0.88rem; }
     }
   </style>
 </head>
@@ -367,18 +364,18 @@
       <div class="stat-label">Reihen</div>
       <div class="stat-value" id="lines">0</div>
     </div>
-    <div class="stat-box">
-      <div class="stat-label">Highscore</div>
-      <div class="stat-value" id="highscore">0</div>
+    <div class="stat-box" id="combo-box">
+      <div class="stat-label">Combo</div>
+      <div class="stat-value" id="combo-val">&#x2014;</div>
     </div>
     <div class="stat-box next-box">
       <div class="stat-label">N&auml;chstes</div>
-      <canvas id="next-canvas" width="76" height="76"></canvas>
+      <canvas id="next-canvas" width="72" height="72"></canvas>
       <div class="next-name" id="next-name">&mdash;</div>
     </div>
   </div>
 
-  <p class="hint">&#x2194; Wischen: bewegen &middot; Tippen: drehen &middot; &#x2193; Wischen: schneller &middot; &#x2191; Wischen: ablegen</p>
+  <p class="hint">&#x2194; Wischen: bewegen &middot; Tippen: drehen &middot; &#x2193; schneller &middot; &#x2191; ablegen</p>
 </main>
 
 <div class="modal-overlay visible" id="howto-modal">
@@ -392,7 +389,7 @@
       <button class="howto-tab" id="howto-tab-desktop" data-tab="desktop">&#x1F4BB; Desktop</button>
     </div>
     <div class="howto-panel" data-panel="mobile" hidden>
-      <p style="color:var(--muted);font-size:0.85rem;margin-bottom:0.5rem;">Steuerung funktioniert &uuml;berall auf dem Bildschirm &mdash; auch unterhalb des Spielfelds.</p>
+      <p style="color:var(--muted);font-size:0.85rem;margin-bottom:0.5rem;">Steuerung funktioniert &uuml;berall auf dem Bildschirm.</p>
       <ul class="howto-list">
         <li><span class="howto-key">&#x2194;</span> Wischen &mdash; Stein bewegen</li>
         <li><span class="howto-key">&#x1F446;</span> Tippen &mdash; Stein drehen</li>
@@ -400,6 +397,7 @@
         <li><span class="howto-key">&#x2191;</span> Wischen &mdash; sofort platzieren</li>
         <li><span class="howto-key">&#x23F8;</span> Button oben &mdash; Pause</li>
       </ul>
+      <p class="howto-tip">&#x1F525; Mehrere Reihen hintereinander r&auml;umen gibt Combo-Bonus &mdash; je l&auml;nger die Kette, desto mehr Punkte!</p>
     </div>
     <div class="howto-panel" data-panel="desktop" hidden>
       <ul class="howto-list">
@@ -409,6 +407,7 @@
         <li><span class="howto-key">&#x2191;</span> sofort platzieren</li>
         <li><span class="howto-key">P</span> Pause</li>
       </ul>
+      <p class="howto-tip">&#x1F525; Mehrere Reihen hintereinander r&auml;umen gibt Combo-Bonus &mdash; je l&auml;nger die Kette, desto mehr Punkte!</p>
     </div>
     <button class="howto-start" id="howto-start">Los geht's &#x1F684;</button>
   </div>
@@ -426,10 +425,7 @@
       [[0,1,0,0],[0,1,0,0],[0,1,0,0],[0,1,0,0]]
     ]},
     O: { color: '#f0922a', name: 'Köf', shapes: [
-      [[1,1],[1,1]],
-      [[1,1],[1,1]],
-      [[1,1],[1,1]],
-      [[1,1],[1,1]]
+      [[1,1],[1,1]], [[1,1],[1,1]], [[1,1],[1,1]], [[1,1],[1,1]]
     ]},
     T: { color: '#e8eaf0', name: 'FLIRT', shapes: [
       [[0,1,0],[1,1,1],[0,0,0]],
@@ -464,20 +460,23 @@
   };
   const TYPES = Object.keys(PIECES);
 
-  const canvas = document.getElementById('board');
-  const ctx = canvas.getContext('2d');
+  const canvas     = document.getElementById('board');
+  const ctx        = canvas.getContext('2d');
   const nextCanvas = document.getElementById('next-canvas');
-  const nctx = nextCanvas.getContext('2d');
-  const overlay = document.getElementById('overlay');
+  const nctx       = nextCanvas.getContext('2d');
+  const overlay    = document.getElementById('overlay');
 
   let board, current, next, bag;
-  let score, level, lines, dropInterval, dropCounter, lastTime;
+  let score, level, lines, combo, dropInterval, dropCounter, lastTime;
   let gameOver, paused;
+  let floatingTexts = [];
+  let flashAlpha = 0, flashColor = '#fff';
+  let shakeFrames = 0, shakeAmt = 0;
   let highscore = parseInt(localStorage.getItem('shuttletetris_highscore') || '0', 10);
-  document.getElementById('highscore').textContent = highscore;
 
+  // ── BOARD HELPERS ────────────────────────────────────
   function createBoard() {
-    return Array.from({ length: ROWS }, () => new Array(COLS).fill(null));
+    return Array.from({ length: ROWS }, function() { return new Array(COLS).fill(null); });
   }
 
   function shuffle(a) {
@@ -511,9 +510,7 @@
     next = nextFromBag();
     const w = PIECES[type].shapes[0][0].length;
     current = { type: type, rot: 0, x: Math.floor((COLS - w) / 2), y: -1 };
-    if (collide(PIECES[type].shapes[0], current.x, current.y)) {
-      endGame();
-    }
+    if (collide(PIECES[type].shapes[0], current.x, current.y)) endGame();
     drawNext();
   }
 
@@ -528,6 +525,11 @@
     }
   }
 
+  // ── COMBO & LINE CLEAR ───────────────────────────────
+  function addFloat(text, x, y, color, sizePx) {
+    floatingTexts.push({ text: text, x: x, y: y, color: color, size: sizePx || 13, alpha: 1, vy: -0.55, life: 95 });
+  }
+
   function clearLines() {
     let cleared = 0;
     for (let r = ROWS - 1; r >= 0; r--) {
@@ -538,16 +540,68 @@
         r++;
       }
     }
+
     if (cleared > 0) {
-      const points = [0, 100, 300, 500, 800][cleared] * level;
-      score += points;
-      lines += cleared;
+      combo++;
+      const base    = [0, 100, 300, 500, 800][cleared] * level;
+      const cbonus  = combo > 1 ? 50 * (combo - 1) * level : 0;
+      const gained  = base + cbonus;
+      score  += gained;
+      lines  += cleared;
+
+      const prevLevel = level;
       level = Math.floor(lines / 10) + 1;
-      dropInterval = Math.max(120, 1000 - (level - 1) * 75);
+      const didLevelUp = level > prevLevel;
+      dropInterval = Math.max(100, 1000 - (level - 1) * 80);
+
       updateStats();
+      updateComboBox();
+
+      // ── Floating text & effects ──────────────────────
+      const cx = canvas.width  / 2;
+      const h  = canvas.height;
+
+      // Score pop
+      addFloat('+' + gained, cx, h * 0.20, '#e8eaf0', 13);
+
+      // Line-count event
+      if (cleared === 4) {
+        flashAlpha = Math.max(flashAlpha, 0.62);
+        flashColor = '#f5c518';
+        shakeFrames = 14; shakeAmt = CELL * 0.35;
+        addFloat('FAHRT FREI! 🟢', cx, h * 0.37, '#ffd24a', 18);
+      } else if (cleared === 3) {
+        flashAlpha = Math.max(flashAlpha, 0.38);
+        flashColor = '#a0ffa0';
+        addFloat('Dreifach! 💨', cx, h * 0.37, '#4ade80', 16);
+      } else if (cleared === 2) {
+        flashAlpha = Math.max(flashAlpha, 0.22);
+        flashColor = '#a0c8ff';
+        addFloat('Doppelt! 🚂', cx, h * 0.37, '#60b0ff', 15);
+      }
+
+      // Combo chain text
+      if (combo >= 2) {
+        const col = combo >= 6 ? '#e040fb' : '#f59e0b';
+        addFloat('COMBO \xD7' + combo + '!', cx, h * 0.55, col, 15);
+      }
+      if (combo >= 6)  addFloat('Vollgas! 🚄', cx, h * 0.70, '#e040fb', 14);
+      if (combo >= 10) addFloat('ICE-Speed! 🚄💨', cx, h * 0.82, '#ff69b4', 13);
+
+      // Level-up
+      if (didLevelUp) {
+        flashAlpha = Math.max(flashAlpha, 0.30);
+        flashColor = '#80ff80';
+        addFloat('Level ' + level + '! 🎯', cx, h * 0.86, '#4ade80', 14);
+      }
+
+    } else {
+      combo = 0;
+      updateComboBox();
     }
   }
 
+  // ── PIECE MOVEMENT ───────────────────────────────────
   function move(dx) {
     if (gameOver || paused) return;
     if (!collide(PIECES[current.type].shapes[current.rot], current.x + dx, current.y)) {
@@ -558,14 +612,12 @@
   function rotatePiece(dir) {
     if (gameOver || paused) return;
     const newRot = (current.rot + dir + 4) % 4;
-    const shape = PIECES[current.type].shapes[newRot];
-    const kicks = [0, 1, -1, 2, -2];
+    const shape  = PIECES[current.type].shapes[newRot];
+    const kicks  = [0, 1, -1, 2, -2];
     for (let i = 0; i < kicks.length; i++) {
       const k = kicks[i];
       if (!collide(shape, current.x + k, current.y)) {
-        current.rot = newRot;
-        current.x += k;
-        return;
+        current.rot = newRot; current.x += k; return;
       }
     }
   }
@@ -574,9 +626,7 @@
     current.y++;
     if (collide(PIECES[current.type].shapes[current.rot], current.x, current.y)) {
       current.y--;
-      merge();
-      clearLines();
-      spawn();
+      merge(); clearLines(); spawn();
     }
     dropCounter = 0;
   }
@@ -586,12 +636,9 @@
     current.y++;
     if (collide(PIECES[current.type].shapes[current.rot], current.x, current.y)) {
       current.y--;
-      merge();
-      clearLines();
-      spawn();
+      merge(); clearLines(); spawn();
     } else {
-      score += 1;
-      updateStats();
+      score += 1; updateStats();
     }
     dropCounter = 0;
   }
@@ -600,13 +647,10 @@
     if (gameOver || paused) return;
     let dist = 0;
     while (!collide(PIECES[current.type].shapes[current.rot], current.x, current.y + 1)) {
-      current.y++;
-      dist++;
+      current.y++; dist++;
     }
     score += dist * 2;
-    merge();
-    clearLines();
-    spawn();
+    merge(); clearLines(); spawn();
     dropCounter = 0;
     updateStats();
   }
@@ -617,7 +661,7 @@
     return y;
   }
 
-  // ── DRAWING ──────────────────────────────────────────
+  // ── DRAWING HELPERS ──────────────────────────────────
   function shade(hex, pct) {
     const num = parseInt(hex.slice(1), 16);
     let r = (num >> 16) + Math.round(255 * pct);
@@ -642,41 +686,34 @@
   function cellEdges(shape, r, c) {
     const rows = shape.length, cols = shape[0].length;
     return {
-      top:    r === 0 || !shape[r - 1][c],
-      bottom: r === rows - 1 || !shape[r + 1][c],
-      left:   c === 0 || !shape[r][c - 1],
-      right:  c === cols - 1 || !shape[r][c + 1]
+      top:    r === 0          || !shape[r - 1][c],
+      bottom: r === rows - 1  || !shape[r + 1][c],
+      left:   c === 0          || !shape[r][c - 1],
+      right:  c === cols - 1  || !shape[r][c + 1]
     };
   }
 
   function boardEdges(r, c) {
     return {
-      top:    r === 0 || !board[r - 1][c],
-      bottom: r === ROWS - 1 || !board[r + 1][c],
-      left:   c === 0 || !board[r][c - 1],
-      right:  c === COLS - 1 || !board[r][c + 1]
+      top:    r === 0         || !board[r - 1][c],
+      bottom: r === ROWS - 1  || !board[r + 1][c],
+      left:   c === 0         || !board[r][c - 1],
+      right:  c === COLS - 1  || !board[r][c + 1]
     };
   }
 
-  // RS1 — Stadler Regio-Shuttle: silver body, dark window band with
-  // signature diagonal "Fachwerk" pillar, blue accent stripe.
+  // ── TRAIN RENDERERS ──────────────────────────────────
   function drawRS1(c, px, py, size, edge, body) {
     const wy = py + size * 0.22, wh = size * 0.40;
     c.fillStyle = '#2a3550';
     c.fillRect(px + size * 0.06, wy, size * 0.88, wh);
-
     c.fillStyle = body;
     c.beginPath();
-    c.moveTo(px + size * 0.40, wy);
-    c.lineTo(px + size * 0.55, wy);
-    c.lineTo(px + size * 0.70, wy + wh);
-    c.lineTo(px + size * 0.55, wy + wh);
-    c.closePath();
-    c.fill();
-
+    c.moveTo(px + size * 0.40, wy); c.lineTo(px + size * 0.55, wy);
+    c.lineTo(px + size * 0.70, wy + wh); c.lineTo(px + size * 0.55, wy + wh);
+    c.closePath(); c.fill();
     c.fillStyle = '#2e9fff';
     c.fillRect(px, py + size * 0.68, size, size * 0.08);
-
     if (edge.left) {
       c.fillStyle = shade(body, -0.08);
       c.fillRect(px, py + size * 0.15, size * 0.18, size * 0.70);
@@ -691,76 +728,48 @@
     }
   }
 
-  // Köf — small yellow shunting locomotive: cab window, black/yellow
-  // hazard stripes along the base, grey buffers at the ends.
   function drawKoef(c, px, py, size, edge, body) {
     c.fillStyle = '#2a3550';
     c.fillRect(px + size * 0.28, py + size * 0.15, size * 0.44, size * 0.30);
-
     const hy = py + size * 0.62, hh = size * 0.18;
     c.save();
-    c.beginPath();
-    c.rect(px, hy, size, hh);
-    c.clip();
-    c.fillStyle = '#222';
-    c.fillRect(px, hy, size, hh);
+    c.beginPath(); c.rect(px, hy, size, hh); c.clip();
+    c.fillStyle = '#222'; c.fillRect(px, hy, size, hh);
     c.fillStyle = '#f5c518';
     for (let i = -1; i < 3; i++) {
       const ox = px + i * size * 0.4;
       c.beginPath();
-      c.moveTo(ox, hy + hh);
-      c.lineTo(ox + size * 0.2, hy + hh);
-      c.lineTo(ox + size * 0.2 + hh, hy);
-      c.lineTo(ox + hh, hy);
-      c.closePath();
-      c.fill();
+      c.moveTo(ox, hy + hh); c.lineTo(ox + size * 0.2, hy + hh);
+      c.lineTo(ox + size * 0.2 + hh, hy); c.lineTo(ox + hh, hy);
+      c.closePath(); c.fill();
     }
     c.restore();
-
-    if (edge.left) {
-      c.fillStyle = '#555';
-      c.fillRect(px, py + size * 0.40, size * 0.10, size * 0.18);
-    }
-    if (edge.right) {
-      c.fillStyle = '#555';
-      c.fillRect(px + size * 0.90, py + size * 0.40, size * 0.10, size * 0.18);
-    }
+    if (edge.left)  { c.fillStyle = '#555'; c.fillRect(px, py + size * 0.40, size * 0.10, size * 0.18); }
+    if (edge.right) { c.fillStyle = '#555'; c.fillRect(px + size * 0.90, py + size * 0.40, size * 0.10, size * 0.18); }
   }
 
-  // FLIRT — modern white EMU: large tinted window band, blue accent
-  // stripe, sloped cab nose with headlight, roof pantograph.
   function drawFlirt(c, px, py, size, edge, body) {
     c.fillStyle = '#3a4a66';
     c.fillRect(px + size * 0.05, py + size * 0.18, size * 0.90, size * 0.42);
-
     c.fillStyle = '#2e9fff';
     c.fillRect(px, py + size * 0.66, size, size * 0.10);
-
     if (edge.top) {
-      c.strokeStyle = '#444';
-      c.lineWidth = Math.max(1, size * 0.04);
+      c.strokeStyle = '#444'; c.lineWidth = Math.max(1, size * 0.04);
       c.beginPath();
-      c.moveTo(px + size * 0.30, py + size * 0.10);
-      c.lineTo(px + size * 0.45, py + size * 0.02);
-      c.lineTo(px + size * 0.55, py + size * 0.02);
-      c.lineTo(px + size * 0.70, py + size * 0.10);
+      c.moveTo(px + size * 0.30, py + size * 0.10); c.lineTo(px + size * 0.45, py + size * 0.02);
+      c.lineTo(px + size * 0.55, py + size * 0.02); c.lineTo(px + size * 0.70, py + size * 0.10);
       c.stroke();
     }
-
     if (edge.left) {
       c.fillStyle = body;
       c.beginPath();
-      c.moveTo(px, py + size * 0.15);
-      c.lineTo(px + size * 0.30, py + size * 0.15);
-      c.lineTo(px + size * 0.10, py + size * 0.85);
-      c.lineTo(px, py + size * 0.85);
+      c.moveTo(px, py + size * 0.15); c.lineTo(px + size * 0.30, py + size * 0.15);
+      c.lineTo(px + size * 0.10, py + size * 0.85); c.lineTo(px, py + size * 0.85);
       c.closePath(); c.fill();
       c.fillStyle = '#3a4a66';
       c.beginPath();
-      c.moveTo(px + size * 0.06, py + size * 0.20);
-      c.lineTo(px + size * 0.26, py + size * 0.20);
-      c.lineTo(px + size * 0.14, py + size * 0.45);
-      c.lineTo(px + size * 0.04, py + size * 0.45);
+      c.moveTo(px + size * 0.06, py + size * 0.20); c.lineTo(px + size * 0.26, py + size * 0.20);
+      c.lineTo(px + size * 0.14, py + size * 0.45); c.lineTo(px + size * 0.04, py + size * 0.45);
       c.closePath(); c.fill();
       c.fillStyle = '#ffd24a';
       c.beginPath(); c.arc(px + size * 0.08, py + size * 0.74, size * 0.045, 0, Math.PI * 2); c.fill();
@@ -768,84 +777,64 @@
     if (edge.right) {
       c.fillStyle = body;
       c.beginPath();
-      c.moveTo(px + size, py + size * 0.15);
-      c.lineTo(px + size * 0.70, py + size * 0.15);
-      c.lineTo(px + size * 0.90, py + size * 0.85);
-      c.lineTo(px + size, py + size * 0.85);
+      c.moveTo(px + size, py + size * 0.15); c.lineTo(px + size * 0.70, py + size * 0.15);
+      c.lineTo(px + size * 0.90, py + size * 0.85); c.lineTo(px + size, py + size * 0.85);
       c.closePath(); c.fill();
       c.fillStyle = '#3a4a66';
       c.beginPath();
-      c.moveTo(px + size * 0.94, py + size * 0.20);
-      c.lineTo(px + size * 0.74, py + size * 0.20);
-      c.lineTo(px + size * 0.86, py + size * 0.45);
-      c.lineTo(px + size * 0.96, py + size * 0.45);
+      c.moveTo(px + size * 0.94, py + size * 0.20); c.lineTo(px + size * 0.74, py + size * 0.20);
+      c.lineTo(px + size * 0.86, py + size * 0.45); c.lineTo(px + size * 0.96, py + size * 0.45);
       c.closePath(); c.fill();
       c.fillStyle = '#ffd24a';
       c.beginPath(); c.arc(px + size * 0.92, py + size * 0.74, size * 0.045, 0, Math.PI * 2); c.fill();
     }
   }
 
-  // Desiro — light-blue twin railcar: rounded windows, roof-mounted
-  // AC unit, rounded boxy cab fronts.
   function drawDesiro(c, px, py, size, edge, body) {
     c.fillStyle = '#cfe8f7';
     roundRect(c, px + size * 0.08, py + size * 0.18, size * 0.84, size * 0.40, size * 0.08);
     c.fill();
-
     if (edge.top) {
       c.fillStyle = shade(body, -0.3);
       c.fillRect(px + size * 0.30, py + size * 0.02, size * 0.40, size * 0.08);
     }
-
     if (edge.left || edge.right) {
       const x0 = edge.left ? px : px + size * 0.78;
       c.fillStyle = shade(body, 0.15);
-      roundRect(c, x0, py + size * 0.12, size * 0.22, size * 0.62, size * 0.06);
-      c.fill();
+      roundRect(c, x0, py + size * 0.12, size * 0.22, size * 0.62, size * 0.06); c.fill();
       c.fillStyle = '#cfe8f7';
-      roundRect(c, x0 + size * 0.04, py + size * 0.18, size * 0.14, size * 0.20, size * 0.03);
-      c.fill();
+      roundRect(c, x0 + size * 0.04, py + size * 0.18, size * 0.14, size * 0.20, size * 0.03); c.fill();
     }
   }
 
-  // Talent — DB-red railcar: white-framed window band, white belt
-  // stripe, white round headlights on the cab fronts.
   function drawTalent(c, px, py, size, edge, body) {
     c.fillStyle = '#fff';
     c.fillRect(px + size * 0.06, py + size * 0.18, size * 0.88, size * 0.42);
     c.fillStyle = '#3a4a66';
     c.fillRect(px + size * 0.10, py + size * 0.21, size * 0.80, size * 0.36);
-
     c.fillStyle = '#fff';
     c.fillRect(px, py + size * 0.66, size, size * 0.07);
-
     if (edge.left) {
       c.fillStyle = body;
-      roundRect(c, px, py + size * 0.10, size * 0.20, size * 0.68, size * 0.05);
-      c.fill();
+      roundRect(c, px, py + size * 0.10, size * 0.20, size * 0.68, size * 0.05); c.fill();
       c.fillStyle = '#fff';
       c.beginPath(); c.arc(px + size * 0.10, py + size * 0.78, size * 0.045, 0, Math.PI * 2); c.fill();
     }
     if (edge.right) {
       c.fillStyle = body;
-      roundRect(c, px + size * 0.80, py + size * 0.10, size * 0.20, size * 0.68, size * 0.05);
-      c.fill();
+      roundRect(c, px + size * 0.80, py + size * 0.10, size * 0.20, size * 0.68, size * 0.05); c.fill();
       c.fillStyle = '#fff';
       c.beginPath(); c.arc(px + size * 0.90, py + size * 0.78, size * 0.045, 0, Math.PI * 2); c.fill();
     }
   }
 
-  // LINT — green diesel railcar: window band, sliding door panel,
-  // angular fronts at the cab ends.
   function drawLint(c, px, py, size, edge, body) {
     c.fillStyle = '#3a4a66';
     c.fillRect(px + size * 0.06, py + size * 0.18, size * 0.62, size * 0.42);
-
     c.fillStyle = shade(body, -0.15);
     c.fillRect(px + size * 0.72, py + size * 0.16, size * 0.22, size * 0.66);
     c.fillStyle = '#3a4a66';
     c.fillRect(px + size * 0.76, py + size * 0.20, size * 0.14, size * 0.30);
-
     if (edge.left) {
       c.fillStyle = shade(body, 0.12);
       c.fillRect(px, py + size * 0.15, size * 0.18, size * 0.70);
@@ -860,46 +849,35 @@
     }
   }
 
-  // VT 642 — purple Desiro Classic: window band, roof-mounted unit,
-  // rounded classic cab fronts with a single round headlight.
   function drawVT642(c, px, py, size, edge, body) {
     c.fillStyle = '#3a4a66';
     c.fillRect(px + size * 0.08, py + size * 0.20, size * 0.84, size * 0.36);
-
     if (edge.top) {
       c.fillStyle = shade(body, -0.3);
       c.fillRect(px + size * 0.20, py + size * 0.02, size * 0.60, size * 0.08);
     }
-
     if (edge.left) {
       c.fillStyle = shade(body, -0.1);
-      roundRect(c, px, py + size * 0.12, size * 0.20, size * 0.62, size * 0.10);
-      c.fill();
+      roundRect(c, px, py + size * 0.12, size * 0.20, size * 0.62, size * 0.10); c.fill();
       c.fillStyle = '#ffd24a';
       c.beginPath(); c.arc(px + size * 0.10, py + size * 0.78, size * 0.05, 0, Math.PI * 2); c.fill();
     }
     if (edge.right) {
       c.fillStyle = shade(body, -0.1);
-      roundRect(c, px + size * 0.80, py + size * 0.12, size * 0.20, size * 0.62, size * 0.10);
-      c.fill();
+      roundRect(c, px + size * 0.80, py + size * 0.12, size * 0.20, size * 0.62, size * 0.10); c.fill();
       c.fillStyle = '#ffd24a';
       c.beginPath(); c.arc(px + size * 0.90, py + size * 0.78, size * 0.05, 0, Math.PI * 2); c.fill();
     }
   }
 
-  const TRAIN_DRAWERS = {
-    I: drawRS1, O: drawKoef, T: drawFlirt, S: drawDesiro, Z: drawTalent, J: drawLint, L: drawVT642
-  };
+  const TRAIN_DRAWERS = { I: drawRS1, O: drawKoef, T: drawFlirt, S: drawDesiro, Z: drawTalent, J: drawLint, L: drawVT642 };
 
   function drawTrainCell(c, px, py, size, type, edge, alpha) {
     c.globalAlpha = alpha === undefined ? 1 : alpha;
     const body = PIECES[type].color;
-
     c.fillStyle = body;
     c.fillRect(px, py, size, size);
-
     TRAIN_DRAWERS[type](c, px, py, size, edge, body);
-
     if (edge.top) {
       c.fillStyle = shade(body, -0.22);
       c.fillRect(px, py, size, size * 0.10);
@@ -912,16 +890,45 @@
       c.beginPath(); c.arc(px + size * 0.27, py + size * 0.93, wr, 0, Math.PI * 2); c.fill();
       c.beginPath(); c.arc(px + size * 0.73, py + size * 0.93, wr, 0, Math.PI * 2); c.fill();
     }
-
     c.strokeStyle = 'rgba(0,0,0,0.3)';
     c.lineWidth = 1;
     c.strokeRect(px + 0.5, py + 0.5, size - 1, size - 1);
-
     c.globalAlpha = 1;
+  }
+
+  // ── DRAW ─────────────────────────────────────────────
+  function drawFloats() {
+    floatingTexts = floatingTexts.filter(function(f) { return f.life > 0; });
+    for (let i = 0; i < floatingTexts.length; i++) {
+      const f = floatingTexts[i];
+      f.y    += f.vy;
+      f.life -= 1;
+      f.alpha = Math.min(1, f.life / 22);
+      ctx.save();
+      ctx.globalAlpha = f.alpha;
+      const sz = Math.max(10, Math.round(f.size * CELL / 25));
+      ctx.font         = 'bold ' + sz + 'px \'Segoe UI\', system-ui, sans-serif';
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor  = 'rgba(0,0,0,0.95)';
+      ctx.shadowBlur   = 7;
+      ctx.fillStyle    = f.color;
+      ctx.fillText(f.text, f.x, f.y);
+      ctx.restore();
+    }
   }
 
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const shaking = shakeFrames > 0;
+    if (shaking) {
+      ctx.save();
+      ctx.translate((Math.random() - 0.5) * shakeAmt, (Math.random() - 0.5) * shakeAmt);
+      shakeFrames--;
+    }
+
+    // Board grid
     for (let r = 0; r < ROWS; r++) {
       for (let c = 0; c < COLS; c++) {
         ctx.fillStyle = '#1a1d27';
@@ -931,9 +938,10 @@
         if (board[r][c]) drawTrainCell(ctx, c * CELL, r * CELL, CELL, board[r][c], boardEdges(r, c));
       }
     }
+
+    // Ghost + active piece
     if (current) {
-      const shape = PIECES[current.type].shapes[current.rot];
-      // ghost
+      const shape  = PIECES[current.type].shapes[current.rot];
       const ghostY = getGhostY();
       for (let r = 0; r < shape.length; r++) {
         for (let c = 0; c < shape[r].length; c++) {
@@ -943,7 +951,6 @@
           }
         }
       }
-      // active piece
       for (let r = 0; r < shape.length; r++) {
         for (let c = 0; c < shape[r].length; c++) {
           if (shape[r][c]) {
@@ -953,14 +960,28 @@
         }
       }
     }
+
+    if (shaking) ctx.restore();
+
+    // Flash overlay
+    if (flashAlpha > 0) {
+      ctx.save();
+      ctx.globalAlpha = flashAlpha;
+      ctx.fillStyle   = flashColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.restore();
+      flashAlpha = Math.max(0, flashAlpha - 0.055);
+    }
+
+    drawFloats();
   }
 
   function drawNext() {
     nctx.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
     const shape = PIECES[next].shapes[0];
-    const size = nextCanvas.width / 4;
-    const offX = (4 - shape[0].length) / 2;
-    const offY = (4 - shape.length) / 2;
+    const size  = nextCanvas.width / 4;
+    const offX  = (4 - shape[0].length) / 2;
+    const offY  = (4 - shape.length) / 2;
     for (let r = 0; r < shape.length; r++) {
       for (let c = 0; c < shape[r].length; c++) {
         if (shape[r][c]) drawTrainCell(nctx, (c + offX) * size, (r + offY) * size, size, next, cellEdges(shape, r, c));
@@ -969,23 +990,46 @@
     document.getElementById('next-name').textContent = PIECES[next].name;
   }
 
+  // ── STATS ─────────────────────────────────────────────
   function updateStats() {
     document.getElementById('score').textContent = score;
     document.getElementById('level').textContent = level;
     document.getElementById('lines').textContent = lines;
   }
 
-  // ── GAME OVER / PAUSE ────────────────────────────────
+  function updateComboBox() {
+    const box = document.getElementById('combo-box');
+    const val = document.getElementById('combo-val');
+    if (combo >= 2) {
+      val.textContent = '\xD7' + combo;
+      box.classList.add('combo-active');
+      val.classList.remove('pulse');
+      void val.offsetWidth;
+      val.classList.add('pulse');
+    } else if (combo === 1) {
+      val.textContent = '\xD71';
+      box.classList.remove('combo-active');
+      val.classList.remove('pulse');
+    } else {
+      val.textContent = '—';
+      box.classList.remove('combo-active');
+      val.classList.remove('pulse');
+    }
+  }
+
+  // ── GAME STATE ────────────────────────────────────────
   function endGame() {
     gameOver = true;
-    if (score > highscore) {
+    const isNew = score > highscore;
+    if (isNew) {
       highscore = score;
       localStorage.setItem('shuttletetris_highscore', String(highscore));
     }
-    document.getElementById('highscore').textContent = highscore;
-    document.getElementById('overlay-title').textContent = 'Game Over';
-    document.getElementById('overlay-text').textContent = 'Score: ' + score;
-    document.getElementById('overlay-btn').textContent = 'Neustart';
+    document.getElementById('overlay-title').textContent = 'Streckenblock! 🔴';
+    document.getElementById('overlay-text').textContent  = isNew
+      ? '🏆 Neuer Highscore: ' + score
+      : 'Score: ' + score + '  —  Highscore: ' + highscore;
+    document.getElementById('overlay-btn').textContent   = 'Neue Fahrt 🚂';
     overlay.classList.add('visible');
   }
 
@@ -995,8 +1039,8 @@
     document.getElementById('btn-pause').innerHTML = paused ? '&#x25B6;' : '&#x23F8;';
     if (paused) {
       document.getElementById('overlay-title').textContent = 'Pausiert';
-      document.getElementById('overlay-text').textContent = '';
-      document.getElementById('overlay-btn').textContent = 'Weiter';
+      document.getElementById('overlay-text').textContent  = '';
+      document.getElementById('overlay-btn').textContent   = 'Weiter';
       overlay.classList.add('visible');
     } else {
       overlay.classList.remove('visible');
@@ -1004,31 +1048,29 @@
   }
 
   function overlayAction() {
-    if (paused && !gameOver) {
-      togglePause();
-    } else {
-      restart();
-    }
+    if (paused && !gameOver) { togglePause(); } else { restart(); }
   }
 
   function restart() {
     board = createBoard();
-    score = 0; level = 1; lines = 0;
+    score = 0; level = 1; lines = 0; combo = 0;
     dropInterval = 1000; dropCounter = 0;
     gameOver = false; paused = false;
     bag = [];
+    floatingTexts = []; flashAlpha = 0; shakeFrames = 0;
     next = nextFromBag();
     spawn();
     overlay.classList.remove('visible');
     document.getElementById('btn-pause').innerHTML = '&#x23F8;';
     updateStats();
+    updateComboBox();
   }
 
-  // ── GAME LOOP ────────────────────────────────────────
+  // ── GAME LOOP ─────────────────────────────────────────
   function update(time) {
     if (time === undefined) time = 0;
     if (!paused && !gameOver) {
-      const delta = time - lastTime;
+      const delta = time - (lastTime || time);
       dropCounter += delta;
       if (dropCounter > dropInterval) dropPiece();
     }
@@ -1037,26 +1079,21 @@
     requestAnimationFrame(update);
   }
 
-  // ── CONTROLS ─────────────────────────────────────────
+  // ── KEYBOARD ─────────────────────────────────────────
   document.addEventListener('keydown', function(e) {
-    if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].indexOf(e.key) !== -1) {
-      e.preventDefault();
-    }
-    if (gameOver) {
-      if (e.key === 'r' || e.key === 'R') restart();
-      return;
-    }
+    if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].indexOf(e.key) !== -1) e.preventDefault();
+    if (gameOver) { if (e.key === 'r' || e.key === 'R') restart(); return; }
     switch (e.key) {
-      case 'ArrowLeft':  move(-1); break;
-      case 'ArrowRight': move(1); break;
-      case 'ArrowDown':  softDrop(); break;
-      case 'ArrowUp':    hardDrop(); break;
-      case ' ':          rotatePiece(1); break;
+      case 'ArrowLeft':  move(-1);        break;
+      case 'ArrowRight': move(1);         break;
+      case 'ArrowDown':  softDrop();      break;
+      case 'ArrowUp':    hardDrop();      break;
+      case ' ':          rotatePiece(1);  break;
       case 'p': case 'P': togglePause(); break;
     }
   });
 
-  // ── TOUCH / SWIPE CONTROLS (whole page) ──────────────
+  // ── TOUCH / SWIPE CONTROLS (whole page) ───────────────
   const boardWrap = document.querySelector('.board-wrap');
   let touchStartX = 0, touchStartY = 0, touchStartTime = 0;
   let touchRefX = 0, touchRefY = 0, touchMoved = false;
@@ -1080,14 +1117,10 @@
     if (!touchActive || e.touches.length !== 1) return;
     e.preventDefault();
     const t = e.touches[0];
-
-    if (Math.abs(t.clientX - touchStartX) > 10 || Math.abs(t.clientY - touchStartY) > 10) {
-      touchMoved = true;
-    }
+    if (Math.abs(t.clientX - touchStartX) > 10 || Math.abs(t.clientY - touchStartY) > 10) touchMoved = true;
     if (gameOver || paused) return;
-
     const step = Math.max(20, CELL * 0.9);
-    while (t.clientX - touchRefX >= step) { move(1); touchRefX += step; }
+    while (t.clientX - touchRefX >= step) { move(1);  touchRefX += step; }
     while (touchRefX - t.clientX >= step) { move(-1); touchRefX -= step; }
     while (t.clientY - touchRefY >= step) { softDrop(); touchRefY += step; }
     if (t.clientY - touchRefY < step) touchRefY = Math.min(touchRefY, t.clientY);
@@ -1101,51 +1134,38 @@
     const dx = t.clientX - touchStartX;
     const dy = t.clientY - touchStartY;
     const dt = Date.now() - touchStartTime;
-
-    if (!touchMoved && dt < 300) {
-      rotatePiece(1);
-      return;
-    }
-    const swipeUpThreshold = Math.max(30, CELL * 1.5);
-    if (-dy > swipeUpThreshold && Math.abs(dy) > Math.abs(dx)) {
-      hardDrop();
-    }
+    if (!touchMoved && dt < 300) { rotatePiece(1); return; }
+    const threshold = Math.max(30, CELL * 1.5);
+    if (-dy > threshold && Math.abs(dy) > Math.abs(dx)) hardDrop();
   }, { passive: true });
 
   // ── RESIZE ───────────────────────────────────────────
   function resize() {
-    const wrap = boardWrap;
-    const availW = wrap.clientWidth;
-    const availH = wrap.clientHeight;
+    const availW = boardWrap.clientWidth;
+    const availH = boardWrap.clientHeight;
     if (availW <= 0 || availH <= 0) return;
-    CELL = Math.max(8, Math.min(34, Math.floor(Math.min(availW / COLS, availH / ROWS))));
-    canvas.width = CELL * COLS;
+    CELL = Math.max(8, Math.min(36, Math.floor(Math.min(availW / COLS, availH / ROWS))));
+    canvas.width  = CELL * COLS;
     canvas.height = CELL * ROWS;
+    const nc = Math.min(76, Math.max(44, CELL * 4));
+    nextCanvas.width = nextCanvas.height = nc;
     draw();
+    if (next) drawNext();
   }
   window.addEventListener('resize', resize);
-  window.addEventListener('orientationchange', function() { setTimeout(resize, 100); });
-  if (window.ResizeObserver) {
-    new ResizeObserver(resize).observe(boardWrap);
-  }
+  window.addEventListener('orientationchange', function() { setTimeout(resize, 120); });
+  if (window.ResizeObserver) new ResizeObserver(resize).observe(boardWrap);
 
   // ── HOW-TO MODAL ─────────────────────────────────────
-  const howtoModal = document.getElementById('howto-modal');
-  const howtoTabs = document.querySelectorAll('.howto-tab');
+  const howtoModal  = document.getElementById('howto-modal');
+  const howtoTabs   = document.querySelectorAll('.howto-tab');
   const howtoPanels = document.querySelectorAll('.howto-panel');
 
   function showHowtoTab(name) {
-    howtoTabs.forEach(function(tab) {
-      tab.classList.toggle('active', tab.dataset.tab === name);
-    });
-    howtoPanels.forEach(function(panel) {
-      panel.hidden = panel.getAttribute('data-panel') !== name;
-    });
+    howtoTabs.forEach(function(tab)     { tab.classList.toggle('active', tab.dataset.tab === name); });
+    howtoPanels.forEach(function(panel) { panel.hidden = panel.getAttribute('data-panel') !== name; });
   }
-
-  howtoTabs.forEach(function(tab) {
-    tab.addEventListener('click', function() { showHowtoTab(tab.dataset.tab); });
-  });
+  howtoTabs.forEach(function(tab) { tab.addEventListener('click', function() { showHowtoTab(tab.dataset.tab); }); });
 
   function closeHowto() {
     howtoModal.classList.remove('visible');
@@ -1153,9 +1173,7 @@
   }
   document.getElementById('howto-close').addEventListener('click', closeHowto);
   document.getElementById('howto-start').addEventListener('click', closeHowto);
-  howtoModal.addEventListener('click', function(e) {
-    if (e.target === howtoModal) closeHowto();
-  });
+  howtoModal.addEventListener('click', function(e) { if (e.target === howtoModal) closeHowto(); });
 
   const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
   showHowtoTab(isTouchDevice ? 'mobile' : 'desktop');
