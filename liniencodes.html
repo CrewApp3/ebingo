@@ -390,6 +390,7 @@
     <div class="search-wrap">
       <span class="search-icon">&#x1F50D;</span>
       <input class="search-input" id="codes-search" type="text"
+        inputmode="numeric" pattern="[0-9]*"
         placeholder="Zugnummer&hellip;"
         oninput="filterCodes()" />
       <button class="search-clear" id="codes-clear" onclick="clearSearch('codes-search','codes-clear',filterCodes)">&#x2715;</button>
