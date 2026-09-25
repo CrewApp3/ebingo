@@ -360,6 +360,7 @@
     <p class="login-sub">Interner Bereich &mdash; Passwort erforderlich</p>
     <form onsubmit="doLogin(event)">
       <input class="login-input" id="pw-input" type="password"
+        inputmode="numeric" pattern="[0-9]*"
         placeholder="Passwort&hellip;" autocomplete="current-password" autofocus />
       <div class="login-error" id="login-error">Falsches Passwort. Bitte erneut versuchen.</div>
       <button class="login-btn" type="submit">Entsperren &#x1F513;</button>
@@ -389,7 +390,7 @@
     <div class="search-wrap">
       <span class="search-icon">&#x1F50D;</span>
       <input class="search-input" id="codes-search" type="text"
-        placeholder="Zugnummer, Liniencode oder Strecke&hellip;"
+        placeholder="Zugnummer&hellip;"
         oninput="filterCodes()" />
       <button class="search-clear" id="codes-clear" onclick="clearSearch('codes-search','codes-clear',filterCodes)">&#x2715;</button>
     </div>
@@ -7166,11 +7167,7 @@ function filterCodes() {
   var rows = APP_DATA.lineCodes.filter(function(r) {
     if (activeLineFilter !== 'ALL' && r.line.indexOf(activeLineFilter) === -1) return false;
     if (!term) return true;
-    return r.trainNumber.toLowerCase().indexOf(term) !== -1 ||
-           r.lineCode.toLowerCase().indexOf(term) !== -1 ||
-           r.route.toLowerCase().indexOf(term) !== -1 ||
-           r.line.toLowerCase().indexOf(term) !== -1 ||
-           r.display.toLowerCase().indexOf(term) !== -1;
+    return r.trainNumber.toLowerCase().indexOf(term) !== -1;
   });
   document.getElementById('codes-count').innerHTML = '<span>' + rows.length + '</span> Eintr&auml;ge';
   var tbody = document.getElementById('codes-tbody');
@@ -7181,10 +7178,10 @@ function filterCodes() {
   tbody.innerHTML = rows.map(function(r) {
     return '<tr>' +
       '<td class="mono">' + highlight(r.trainNumber, term) + '</td>' +
-      '<td class="mono code-cell">' + highlight(r.lineCode, term) + '</td>' +
-      '<td>' + highlight(r.route, term) + '</td>' +
+      '<td class="mono code-cell">' + escHtml(r.lineCode) + '</td>' +
+      '<td>' + escHtml(r.route) + '</td>' +
       '<td><span class="line-badge" style="background:' + getLineColor(r.line) + '">' + escHtml(r.line) + '</span></td>' +
-      '<td>' + highlight(r.display, term) + '</td>' +
+      '<td>' + escHtml(r.display) + '</td>' +
     '</tr>';
   }).join('');
 }
