@@ -5,201 +5,218 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <title>Eisenbahnerbingo &mdash; BahnCenter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:      #0f1117;
-      --surface: #1a1d27;
-      --surf2:   #222535;
-      --border:  #2e3248;
-      --green:   #2563eb;
-      --green2:  #3b82f6;
-      --red:     #f59e0b;
-      --gold:    #c8a000;
-      --gold-bg: #2a2200;
-      --text:    #e8eaf0;
-      --muted:   #8b90a8;
+      --deep:     #0f0f10;
+      --bg:       #141415;
+      --surface:  #19191b;
+      --raised:   #232325;
+      --line:     rgba(237, 237, 237, 0.08);
+      --line-2:   rgba(237, 237, 237, 0.16);
+      --text:     #ededed;
+      --text-2:   #a1a1a6;
+      --muted:    #85858b;
+      --amber:    #f5a524;
+      --on-amber: #1a1300;
+      --signal:   #13a538;   /* RB13-Grün: Bingo = Fahrt frei */
+      --signal-d: #0e7f2b;
+      --ease:     cubic-bezier(0.22, 1, 0.36, 1);
+      --sans:     'IBM Plex Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --mono:     'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: var(--sans);
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+    :focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+    .ico {
+      width: 16px; height: 16px; flex-shrink: 0;
+      fill: none; stroke: currentColor; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
     }
 
-    /* ── TOP NAV ─────────────────────────────────────── */
+    /* ── NAV ─────────────────────────────────────────── */
     .top-nav {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0.6rem 1.5rem;
-      min-height: 52px;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
+      height: 56px; padding: 0 24px;
+      display: flex; align-items: center; gap: 12px;
+      background: var(--deep);
+      border-bottom: 1px solid var(--line);
     }
-    .nav-dot {
-      width: 8px; height: 8px;
-      background: var(--red);
-      border-radius: 50%;
-      margin-bottom: 3px;
-      flex-shrink: 0;
+    .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; }
+    .brand-mark {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 24px; padding: 0 6px; border-radius: 4px;
+      background: var(--amber); color: var(--on-amber);
+      font: 600 13px/1 var(--mono);
     }
-    .nav-name { font-size: 0.95rem; font-weight: 600; }
-    .nav-sub  { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+    .brand-name { font-size: 16px; font-weight: 500; }
+    .nav-sep  { color: var(--muted); }
+    .nav-page { font-size: 14px; color: var(--text-2); }
     .back-btn {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 0.35rem 0.75rem;
-      background: none; border: 1px solid var(--border);
-      border-radius: 6px; color: var(--muted);
-      text-decoration: none; font-size: 0.8rem; font-weight: 500;
-      transition: border-color 0.15s, color 0.15s;
+      margin-left: auto;
+      height: 32px; padding: 0 12px;
+      display: inline-flex; align-items: center; gap: 8px;
+      border-radius: 8px; border: 1px solid var(--line-2);
+      color: var(--text-2); text-decoration: none; font-size: 13px;
+      transition: color 150ms var(--ease), background-color 150ms var(--ease);
     }
-    .back-btn:hover { border-color: var(--muted); color: var(--text); }
-    .top-nav .back-btn { margin-left: auto; }
-    .nav-logo {
-      font-size: 1.5rem; font-weight: 900; letter-spacing: -1.5px; line-height: 1;
-      background: linear-gradient(to right, var(--green2), #7c3aed);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+    .back-btn:hover { color: var(--text); background: var(--raised); }
 
-    /* ── MAIN WRAPPER ────────────────────────────────── */
+    /* ── MAIN ────────────────────────────────────────── */
     main {
       flex: 1;
       width: 100%;
       max-width: 600px;
       margin: 0 auto;
-      padding: 1rem 0.75rem 2rem;
+      padding: 24px 16px 40px;
       display: flex;
       flex-direction: column;
-      gap: 0.85rem;
+      gap: 16px;
     }
 
-    /* ── LOGO ────────────────────────────────────────── */
-    .logo-wrap {
-      text-align: center;
-    }
+    .logo-wrap { text-align: center; padding: 8px 0; }
     .logo-wrap img {
       max-width: 100%;
-      max-height: 110px;
+      max-height: 104px;
       object-fit: contain;
       filter: brightness(0) invert(1);
     }
 
-    /* ── THEME BUTTONS ───────────────────────────────── */
+    /* ── THEMA ───────────────────────────────────────── */
     .themes {
-      display: flex;
-      gap: 0.5rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      padding: 4px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
     }
     .themes button {
-      flex: 1;
-      padding: 0.6rem 0;
-      border: 1px solid var(--border);
-      background: var(--surface);
+      height: 36px;
+      border: 1px solid transparent;
+      background: transparent;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--muted);
-      transition: all 0.15s;
+      font: inherit; font-size: 14px; font-weight: 500;
+      color: var(--text-2);
+      transition: color 150ms var(--ease), background-color 150ms var(--ease), border-color 150ms var(--ease);
       touch-action: manipulation;
     }
-    .themes button:hover  { border-color: var(--green2); color: var(--text); }
-    .themes button.active { background: var(--green); border-color: var(--green); color: #fff; }
+    .themes button:hover  { color: var(--text); }
+    .themes button.active {
+      background: var(--amber); border-color: var(--amber); color: var(--on-amber);
+      font-weight: 600;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.25);
+    }
 
-    /* ── BINGO GRID ──────────────────────────────────── */
+    /* ── BINGO-FELD ──────────────────────────────────── */
     .bingo {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 4px;
       width: 100%;
     }
-
     .cell {
       background: var(--surface);
-      border: 1px solid var(--border);
+      border: 1px solid var(--line);
       aspect-ratio: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
       font-size: 13px;
-      font-weight: 600;
-      padding: 5px;
+      font-weight: 500;
+      padding: 4px;
       cursor: pointer;
-      border-radius: 6px;
+      border-radius: 8px;
       word-break: break-word;
       hyphens: auto;
       line-height: 1.2;
       overflow: hidden;
       color: var(--text);
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      transition: background-color 150ms var(--ease), border-color 150ms var(--ease), color 150ms var(--ease);
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
       user-select: none;
     }
-    .cell:hover:not(.marked):not(.bingo) { background: var(--surf2); border-color: var(--muted); }
+    .cell:hover:not(.marked):not(.bingo) { background: var(--raised); border-color: var(--line-2); }
+    .cell:active { transform: scale(0.97); }
     .cell.marked {
-      background: var(--green);
-      border-color: var(--green);
-      color: #fff;
+      background: var(--amber);
+      border-color: var(--amber);
+      color: var(--on-amber);
     }
     .cell.bingo {
-      background: var(--gold);
-      border-color: var(--gold);
-      color: #000;
-      font-weight: 800;
-      box-shadow: 0 0 10px rgba(200,160,0,0.4);
+      background: var(--signal-d);
+      border-color: var(--signal);
+      color: #fff;
+      font-weight: 600;
     }
 
-    /* ── ACTION BUTTONS ──────────────────────────────── */
+    /* ── AKTIONEN ────────────────────────────────────── */
     .buttons {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.5rem;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 8px;
     }
     .buttons button {
-      padding: 0.7rem 0.5rem;
-      border: none;
-      border-radius: 8px;
+      height: 44px;
+      padding: 0 12px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: white;
-      transition: opacity 0.15s;
+      font: inherit; font-size: 14px; font-weight: 500;
+      color: var(--text);
+      background: var(--raised);
+      border: 1px solid var(--line);
+      transition: border-color 150ms var(--ease), opacity 150ms var(--ease);
       touch-action: manipulation;
+      white-space: nowrap;
     }
-    .buttons button:hover   { opacity: 0.85; }
-    .buttons button:active  { opacity: 0.7; }
-    #btn-randomize { background: var(--red); }
-    #btn-print     { background: #1a5fa8; }
-    #btn-download  { background: #157762; }
+    .buttons button:hover  { filter: brightness(1.1); }
+    .buttons button:active { transform: scale(0.98); }
+    /* Farben aus dem Liniennetz: RB76 lila, RE21 blau, RB13 grün */
+    #btn-randomize, #btn-print, #btn-download {
+      font-weight: 600;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+    #btn-randomize { background: #9b3aa0; border-color: #9b3aa0; color: #fff; }
+    #btn-print     { background: #1f7ae0; border-color: #1f7ae0; color: #fff; }
+    #btn-download  { background: #0e8a2e; border-color: #0e8a2e; color: #fff; }
 
-    /* ── BINGO BANNER ────────────────────────────────── */
+    /* ── BINGO-MELDUNG ───────────────────────────────── */
     .bingo-banner {
       display: none;
-      background: var(--gold-bg);
-      border: 1px solid var(--gold);
-      border-radius: 10px;
-      padding: 0.75rem 1rem;
-      text-align: center;
-      font-size: 1rem;
-      font-weight: 800;
-      color: var(--gold);
-      letter-spacing: 0.05em;
-      animation: pulse 1s ease infinite alternate;
+      align-items: center; gap: 12px;
+      background: color-mix(in srgb, var(--signal) 14%, var(--surface));
+      border: 1px solid color-mix(in srgb, var(--signal) 50%, transparent);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      animation: rise 300ms var(--ease);
     }
-    .bingo-banner.visible { display: block; }
-    @keyframes pulse {
-      from { opacity: 0.8; }
-      to   { opacity: 1; box-shadow: 0 0 16px rgba(200,160,0,0.3); }
+    .bingo-banner.visible { display: flex; }
+    .bingo-banner .sig {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--signal); flex-shrink: 0;
     }
+    .bingo-banner span.sub { color: var(--text-2); font-weight: 400; }
+    @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
-    /* ── PRINT ───────────────────────────────────────── */
+    /* ── DRUCK ───────────────────────────────────────── */
     .print-label { display: none; }
     @media print {
       body        { background: #fff; color: #000; }
@@ -210,30 +227,26 @@
         display: block;
         text-align: center;
         font-size: 13px;
-        font-weight: 700;
+        font-weight: 600;
         color: #000;
-        margin: 4px 0 6px;
+        margin: 4px 0 8px;
       }
       .bingo      { gap: 2px; }
       .cell       { background: #fff !important; border-color: #ccc !important; color: #000 !important; font-size: 11px !important; }
-      .cell.marked { background: #2563eb !important; color: #fff !important; }
-      .cell.bingo  { background: #c8a000 !important; color: #000 !important; }
+      .cell.marked { background: #f5a524 !important; color: #000 !important; }
+      .cell.bingo  { background: #0e7f2b !important; color: #fff !important; }
     }
 
-    /* ── RESPONSIVE TWEAKS ───────────────────────────── */
     @media (max-width: 480px) {
-      .top-nav { padding: 0.5rem 1rem; min-height: 46px; }
-      .nav-logo { font-size: 1.2rem; }
-      .top-nav > span:first-child { font-size: 1.2rem !important; }
-      .nav-sub { display: none; }
+      .top-nav { height: 52px; padding: 0 16px; }
+      .brand-name { display: none; }
+      main { padding: 16px 12px 32px; gap: 12px; }
+      .logo-wrap img { max-height: 88px; }
     }
     @media (max-width: 380px) {
-      .top-nav { padding: 0.45rem 0.75rem; gap: 0.5rem; min-height: 42px; }
-      .nav-name { font-size: 0.85rem; }
-      .nav-dot { display: none; }
-      .cell { font-size: 11px; padding: 3px; border-radius: 4px; }
-      .buttons button { font-size: 0.75rem; padding: 0.6rem 0.25rem; }
-      .themes button { padding: 0.5rem 0; font-size: 0.82rem; }
+      .cell { font-size: 11px; padding: 2px; border-radius: 6px; }
+      .buttons { grid-template-columns: 1fr 1fr; }
+      .buttons #btn-randomize { grid-column: 1 / -1; }
     }
     @media (min-width: 500px) {
       .cell { font-size: 14px; }
@@ -242,15 +255,19 @@
 </head>
 <body>
 
-<nav class="top-nav">
-  <span style="font-size:1.5rem;line-height:1;">🚂</span><span class="nav-logo">BC</span>
-  <span class="nav-dot"></span>
-  <div>
-    <div class="nav-name">BahnCenter</div>
-    <div class="nav-sub">Eisenbahnerbingo</div>
-  </div>
-  <a class="back-btn" href="index.html">&#x2190; Zur&uuml;ck</a>
-</nav>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="m18 14 4 4-4 4"/><path d="m18 2 4 4-4 4"/><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-7.6a4 4 0 0 1 3.3-1.7H22"/><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2"/><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></symbol>
+</svg>
+
+<header class="top-nav">
+  <a class="brand" href="index.html"><span class="brand-mark">BC</span><span class="brand-name">BahnCenter</span></a>
+  <span class="nav-sep">/</span>
+  <span class="nav-page">Eisenbahnerbingo</span>
+  <a class="back-btn" href="index.html"><svg class="ico"><use href="#i-back"/></svg>&Uuml;bersicht</a>
+</header>
 
 <main>
   <div class="logo-wrap">
@@ -258,7 +275,7 @@
   </div>
   <p class="print-label" id="print-label">Eisenbahnerbingo &mdash; Thema: TF</p>
 
-  <div class="themes">
+  <div class="themes" role="group" aria-label="Thema">
     <button class="active" onclick="setTheme('TF', this)">TF</button>
     <button onclick="setTheme('ZUB', this)">ZUB</button>
     <button onclick="setTheme('Beides', this)">Beides</button>
@@ -266,12 +283,15 @@
 
   <div class="bingo" id="grid"></div>
 
-  <div class="bingo-banner" id="bingo-banner">&#x1F3C6; BINGO! &#x1F3C6;</div>
+  <div class="bingo-banner" id="bingo-banner" role="status">
+    <span class="sig" aria-hidden="true"></span>
+    <span>Bingo <span class="sub">&middot; Reihe voll, Fahrt frei</span></span>
+  </div>
 
   <div class="buttons">
-    <button id="btn-randomize" onclick="randomize()">&#x1F500; Randomize</button>
-    <button id="btn-print"     onclick="window.print()">&#x1F5A8; Drucken</button>
-    <button id="btn-download"  onclick="download()">&#x2B07; Download</button>
+    <button id="btn-randomize" onclick="randomize()"><svg class="ico"><use href="#i-shuffle"/></svg>Neu mischen</button>
+    <button id="btn-print"     onclick="window.print()"><svg class="ico"><use href="#i-print"/></svg>Drucken</button>
+    <button id="btn-download"  onclick="download()"><svg class="ico"><use href="#i-image"/></svg>Als Bild</button>
   </div>
 </main>
 
@@ -387,7 +407,7 @@
 
   function randomize() {
     const pool = getPool();
-    if (pool.length < 25) { alert('Zu wenig Einträge! Mindestens 25 nötig.'); return; }
+    if (pool.length < 25) { alert('Zu wenig Einträge, mindestens 25 nötig'); return; }
     buildGrid(shuffle(pool).slice(0, 25), null);
     saveState();
   }
@@ -488,7 +508,7 @@
     ctx.fillRect(0, 0, W, H);
 
     // Dark header strip (matches app theme — makes white/colored logo visible)
-    ctx.fillStyle = '#1a1d27';
+    ctx.fillStyle = '#141415';
     ctx.fillRect(0, 0, W, headerH);
 
     if (logoImg) {
@@ -500,7 +520,7 @@
 
     // Theme label bar
     const labelY = pad + logoH + (logoImg ? 10 : 0);
-    ctx.fillStyle = '#2563eb';
+    ctx.fillStyle = '#232325';
     ctx.fillRect(0, labelY, W, labelH);
     ctx.fillStyle = '#fff';
     ctx.font = 'bold 16px Arial';
@@ -515,10 +535,10 @@
       const cw = cs - 2, ch = cs - 2;
       const isBingo  = cell.classList.contains('bingo');
       const isMarked = cell.classList.contains('marked');
-      ctx.fillStyle = isBingo ? '#c8a000' : isMarked ? '#2563eb' : '#ffffff';
+      ctx.fillStyle = isBingo ? '#0e7f2b' : isMarked ? '#f5a524' : '#ffffff';
       ctx.fillRect(x, y, cw, ch);
       const { lines, size, lineH } = fitCanvasText(ctx, cell.textContent.trim(), cw - 14, ch - 14, 18);
-      ctx.fillStyle = (isBingo) ? '#000' : isMarked ? '#fff' : '#111';
+      ctx.fillStyle = (isBingo) ? '#fff' : isMarked ? '#1a1300' : '#111';
       ctx.font = 'bold ' + size + 'px Arial';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';

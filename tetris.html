@@ -5,25 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <title>Shuttletetris &mdash; BahnCenter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:      #0f1117;
-      --surface: #1a1d27;
-      --surf2:   #222535;
-      --border:  #2e3248;
-      --green:   #2563eb;
-      --green2:  #3b82f6;
-      --red:     #f59e0b;
-      --purple:  #7c3aed;
-      --gold:    #f5c518;
-      --text:    #e8eaf0;
-      --muted:   #8b90a8;
+      --deep:     #0f0f10;
+      --bg:       #141415;
+      --surface:  #19191b;
+      --surf2:    #232325;
+      --border:   rgba(237, 237, 237, 0.08);
+      --line-2:   rgba(237, 237, 237, 0.16);
+      --text:     #ededed;
+      --text-2:   #a1a1a6;
+      --muted:    #85858b;
+      --amber:    #f5a524;
+      --on-amber: #1a1300;
+      --gold:     #f5a524;
+      --ease:     cubic-bezier(0.22, 1, 0.36, 1);
+      --sans:     'IBM Plex Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --mono:     'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+    }
+    :focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+    .ico {
+      width: 16px; height: 16px; flex-shrink: 0;
+      fill: none; stroke: currentColor; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body { height: 100%; }
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
       background: var(--bg);
       color: var(--text);
       height: 100vh;
@@ -33,44 +47,34 @@
       overflow: hidden;
     }
 
-    /* ── TOP NAV ─────────────────────────────────────── */
+    /* ── NAV ─────────────────────────────────────────── */
     .top-nav {
-      background: var(--surface);
+      height: 56px; padding: 0 24px;
+      display: flex; align-items: center; gap: 12px;
+      background: var(--deep);
       border-bottom: 1px solid var(--border);
-      padding: 0.6rem 1.5rem;
-      min-height: 52px;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
       flex-shrink: 0;
     }
-    .nav-dot {
-      width: 8px; height: 8px;
-      background: var(--red);
-      border-radius: 50%;
-      margin-bottom: 3px;
-      flex-shrink: 0;
+    .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; }
+    .brand-mark {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 24px; padding: 0 6px; border-radius: 4px;
+      background: var(--amber); color: var(--on-amber);
+      font: 600 13px/1 var(--mono);
     }
-    .nav-name { font-size: 0.95rem; font-weight: 600; }
-    .nav-sub  { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+    .brand-name { font-size: 16px; font-weight: 500; }
+    .nav-sep  { color: var(--muted); }
+    .nav-page { font-size: 14px; color: var(--text-2); }
     .back-btn {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 0.35rem 0.75rem;
-      background: none; border: 1px solid var(--border);
-      border-radius: 6px; color: var(--muted);
-      text-decoration: none; font-size: 0.8rem; font-weight: 500;
-      transition: border-color 0.15s, color 0.15s;
+      height: 32px; padding: 0 12px;
+      display: inline-flex; align-items: center; gap: 8px;
+      border-radius: 8px; border: 1px solid var(--line-2);
+      color: var(--text-2); text-decoration: none; font-size: 13px;
+      transition: color 150ms var(--ease), background-color 150ms var(--ease);
       touch-action: manipulation;
     }
-    .back-btn:hover { border-color: var(--muted); color: var(--text); }
+    .back-btn:hover { color: var(--text); background: var(--surf2); }
     .top-nav .pause-btn { margin-left: auto; }
-    .nav-logo {
-      font-size: 1.5rem; font-weight: 900; letter-spacing: -1.5px; line-height: 1;
-      background: linear-gradient(to right, var(--green2), #7c3aed);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
 
     /* ── MAIN WRAPPER ────────────────────────────────── */
     main {
@@ -173,14 +177,13 @@
       overflow: hidden;
     }
     .stat-label {
-      font-size: 0.62rem; color: var(--muted);
-      text-transform: uppercase; letter-spacing: 0.04em;
+      font-size: 11px; line-height: 16px; color: var(--muted);
       white-space: nowrap;
     }
-    .stat-value { font-size: 1.1rem; font-weight: 800; margin-top: 2px; }
+    .stat-value { font: 500 18px/24px var(--mono); font-variant-numeric: tabular-nums; }
     .next-box { flex: 1.5; min-width: 72px; }
     #next-canvas { display: block; margin: 2px auto 0; }
-    .next-name { text-align: center; font-size: 0.7rem; color: var(--muted); margin-top: 2px; font-weight: 700; }
+    .next-name { text-align: center; font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 500; }
 
     /* ── COMBO ANIMATION ────────────────────────────── */
     @keyframes combopulse {
@@ -195,12 +198,12 @@
     /* ── PAUSE BUTTON ────────────────────────────────── */
     .pause-btn {
       display: inline-flex; align-items: center; justify-content: center;
-      width: 34px; height: 34px; flex-shrink: 0;
-      border: 1px solid var(--border); background: var(--surface);
-      border-radius: 8px; color: var(--text); font-size: 1rem;
+      width: 32px; height: 32px; flex-shrink: 0;
+      border: 1px solid var(--line-2); background: transparent;
+      border-radius: 8px; color: var(--text-2);
       cursor: pointer; touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
-      user-select: none; transition: background 0.1s;
+      user-select: none; transition: background-color 150ms var(--ease), color 150ms var(--ease);
     }
     .pause-btn:active { background: var(--surf2); }
 
@@ -213,26 +216,26 @@
     /* ── IN-GAME OVERLAY ────────────────────────────── */
     .overlay {
       position: absolute; inset: 0;
-      background: rgba(15,17,23,0.9);
+      background: rgba(20,20,21,0.92);
       display: none; flex-direction: column;
       align-items: center; justify-content: center;
       text-align: center; border-radius: 8px;
       gap: 0.5rem; padding: 1rem;
     }
     .overlay.visible { display: flex; }
-    .overlay h2 { font-size: 1.25rem; }
+    .overlay h2 { font-size: 20px; font-weight: 500; }
     .overlay p  { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
     .overlay button {
-      padding: 0.6rem 1.5rem; border: none; border-radius: 8px;
-      background: var(--purple); color: #fff;
-      font-weight: 700; cursor: pointer; font-size: 0.9rem;
+      height: 40px; padding: 0 20px; border: none; border-radius: 10px;
+      background: var(--text); color: #141415;
+      font: inherit; font-weight: 500; cursor: pointer; font-size: 14px;
       margin-top: 0.3rem; touch-action: manipulation;
     }
 
     /* ── HOW-TO MODAL ────────────────────────────────── */
     .modal-overlay {
       position: fixed; inset: 0;
-      background: rgba(8,9,14,0.8);
+      background: rgba(0,0,0,0.72);
       display: none; align-items: center; justify-content: center;
       padding: 1rem; z-index: 2000;
     }
@@ -245,7 +248,7 @@
       display: flex; flex-direction: column; gap: 1rem;
     }
     .modal-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-    .modal-header h2 { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.2px; }
+    .modal-header h2 { font-size: 18px; font-weight: 500; }
     .modal-close {
       background: var(--surf2); border: 1px solid var(--border); color: var(--muted);
       border-radius: 8px; width: 32px; height: 32px; flex-shrink: 0;
@@ -258,12 +261,12 @@
     .howto-tab {
       flex: 1; padding: 0.5rem; border-radius: 8px;
       border: 1px solid var(--border); background: var(--surf2);
-      color: var(--muted); font-weight: 700; font-size: 0.85rem;
+      color: var(--text-2); font: inherit; font-weight: 500; font-size: 14px;
       cursor: pointer; touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      transition: background-color 150ms var(--ease), color 150ms var(--ease), border-color 150ms var(--ease);
     }
-    .howto-tab.active { background: var(--purple); border-color: var(--purple); color: #fff; }
+    .howto-tab.active { background: var(--surface); border-color: var(--line-2); color: var(--text); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08); }
     .howto-panel[hidden] { display: none; }
     .howto-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
     .howto-list li { display: flex; align-items: center; gap: 0.65rem; font-size: 0.85rem; }
@@ -271,7 +274,7 @@
       display: inline-flex; align-items: center; justify-content: center;
       min-width: 2.6rem; padding: 0.3rem 0.5rem;
       background: var(--surf2); border: 1px solid var(--border);
-      border-radius: 6px; font-weight: 700; font-size: 0.85rem;
+      border-radius: 6px; font: 500 13px/1.2 var(--mono);
       flex-shrink: 0; text-align: center; white-space: nowrap;
     }
     .howto-tip {
@@ -279,18 +282,16 @@
       margin-top: 0.6rem; line-height: 1.4;
     }
     .howto-start {
-      padding: 0.65rem; border: none; border-radius: 8px;
-      background: var(--purple); color: #fff; font-weight: 700; font-size: 0.95rem;
+      height: 44px; border: none; border-radius: 10px;
+      background: var(--text); color: #141415; font: inherit; font-weight: 500; font-size: 15px;
       cursor: pointer; touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
     }
 
     /* ── RESPONSIVE ──────────────────────────────────── */
     @media (max-width: 480px) {
-      .top-nav { padding: 0.5rem 1rem; min-height: 46px; }
-      .nav-logo { font-size: 1.2rem; }
-      .top-nav > span:first-child { font-size: 1.2rem !important; }
-      .nav-sub { display: none; }
+      .top-nav { height: 52px; padding: 0 16px; }
+      .brand-name { display: none; }
       main { padding: 0.4rem 0.5rem; gap: 0.4rem; }
       .board-scene { padding: 8px 8px 0; border-radius: 10px; }
       .track { margin: 0 -8px; height: 14px; }
@@ -302,9 +303,7 @@
       .hint { font-size: 0.6rem; }
     }
     @media (max-width: 380px) {
-      .top-nav { padding: 0.45rem 0.75rem; gap: 0.5rem; min-height: 42px; }
-      .nav-name { font-size: 0.85rem; }
-      .nav-dot { display: none; }
+      .top-nav { padding: 0 12px; gap: 8px; }
       .scene-sky { display: none; }
       .scene-flowers { letter-spacing: 0.08rem; font-size: 0.7rem; }
       .stat-value { font-size: 0.85rem; }
@@ -322,16 +321,20 @@
 </head>
 <body>
 
-<nav class="top-nav">
-  <span style="font-size:1.5rem;line-height:1;">🚂</span><span class="nav-logo">BC</span>
-  <span class="nav-dot"></span>
-  <div>
-    <div class="nav-name">BahnCenter</div>
-    <div class="nav-sub">Shuttletetris</div>
-  </div>
-  <button class="pause-btn" id="btn-pause" onclick="togglePause()" aria-label="Pause">&#x23F8;</button>
-  <a class="back-btn" href="index.html">&#x2190; Zur&uuml;ck</a>
-</nav>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+</svg>
+
+<header class="top-nav">
+  <a class="brand" href="index.html"><span class="brand-mark">BC</span><span class="brand-name">BahnCenter</span></a>
+  <span class="nav-sep">/</span>
+  <span class="nav-page">Shuttletetris</span>
+  <button class="pause-btn" id="btn-pause" onclick="togglePause()" aria-label="Pause"><svg class="ico"><use href="#i-pause"/></svg></button>
+  <a class="back-btn" href="index.html"><svg class="ico"><use href="#i-back"/></svg>&Uuml;bersicht</a>
+</header>
 
 <main>
   <div class="board-scene">
@@ -353,7 +356,7 @@
 
   <div class="stats-row">
     <div class="stat-box">
-      <div class="stat-label">Score</div>
+      <div class="stat-label">Punkte</div>
       <div class="stat-value" id="score">0</div>
     </div>
     <div class="stat-box">
@@ -381,23 +384,23 @@
 <div class="modal-overlay visible" id="howto-modal">
   <div class="modal">
     <div class="modal-header">
-      <h2>&#x1F684; Wie spielt man?</h2>
-      <button class="modal-close" id="howto-close" aria-label="Schlie&szlig;en">&#x2715;</button>
+      <h2>Steuerung</h2>
+      <button class="modal-close" id="howto-close" aria-label="Schlie&szlig;en"><svg class="ico"><use href="#i-x"/></svg></button>
     </div>
     <div class="howto-tabs">
-      <button class="howto-tab" id="howto-tab-mobile" data-tab="mobile">&#x1F4F1; Mobile</button>
-      <button class="howto-tab" id="howto-tab-desktop" data-tab="desktop">&#x1F4BB; Desktop</button>
+      <button class="howto-tab" id="howto-tab-mobile" data-tab="mobile">Handy</button>
+      <button class="howto-tab" id="howto-tab-desktop" data-tab="desktop">Computer</button>
     </div>
     <div class="howto-panel" data-panel="mobile" hidden>
       <p style="color:var(--muted);font-size:0.85rem;margin-bottom:0.5rem;">Steuerung funktioniert &uuml;berall auf dem Bildschirm.</p>
       <ul class="howto-list">
         <li><span class="howto-key">&#x2194;</span> Wischen &mdash; Stein bewegen</li>
-        <li><span class="howto-key">&#x1F446;</span> Tippen &mdash; Stein drehen</li>
+        <li><span class="howto-key">Tipp</span> Tippen &mdash; Stein drehen</li>
         <li><span class="howto-key">&#x2193;</span> Wischen &mdash; schneller fallen lassen</li>
         <li><span class="howto-key">&#x2191;</span> Wischen &mdash; sofort platzieren</li>
-        <li><span class="howto-key">&#x23F8;</span> Button oben &mdash; Pause</li>
+        <li><span class="howto-key"><svg class="ico"><use href="#i-pause"/></svg></span> Button oben &mdash; Pause</li>
       </ul>
-      <p class="howto-tip">&#x1F525; Mehrere Reihen hintereinander r&auml;umen gibt Combo-Bonus &mdash; je l&auml;nger die Kette, desto mehr Punkte!</p>
+      <p class="howto-tip">Mehrere Reihen hintereinander r&auml;umen gibt einen Combo-Bonus. Je l&auml;nger die Kette, desto mehr Punkte.</p>
     </div>
     <div class="howto-panel" data-panel="desktop" hidden>
       <ul class="howto-list">
@@ -407,9 +410,9 @@
         <li><span class="howto-key">&#x2191;</span> sofort platzieren</li>
         <li><span class="howto-key">P</span> Pause</li>
       </ul>
-      <p class="howto-tip">&#x1F525; Mehrere Reihen hintereinander r&auml;umen gibt Combo-Bonus &mdash; je l&auml;nger die Kette, desto mehr Punkte!</p>
+      <p class="howto-tip">Mehrere Reihen hintereinander r&auml;umen gibt einen Combo-Bonus. Je l&auml;nger die Kette, desto mehr Punkte.</p>
     </div>
-    <button class="howto-start" id="howto-start">Los geht's &#x1F684;</button>
+    <button class="howto-start" id="howto-start">Spiel starten</button>
   </div>
 </div>
 
@@ -427,7 +430,7 @@
     O: { color: '#f0922a', name: 'Köf', shapes: [
       [[1,1],[1,1]], [[1,1],[1,1]], [[1,1],[1,1]], [[1,1],[1,1]]
     ]},
-    T: { color: '#e8eaf0', name: 'FLIRT', shapes: [
+    T: { color: '#ececec', name: 'FLIRT', shapes: [
       [[0,1,0],[1,1,1],[0,0,0]],
       [[0,1,0],[0,1,1],[0,1,0]],
       [[0,0,0],[1,1,1],[0,1,0]],
@@ -562,7 +565,7 @@
       const h  = canvas.height;
 
       // Score pop
-      addFloat('+' + gained, cx, h * 0.20, '#e8eaf0', 13);
+      addFloat('+' + gained, cx, h * 0.20, '#ececec', 13);
 
       // Line-count event
       if (cleared === 4) {
@@ -931,9 +934,9 @@
     // Board grid
     for (let r = 0; r < ROWS; r++) {
       for (let c = 0; c < COLS; c++) {
-        ctx.fillStyle = '#1a1d27';
+        ctx.fillStyle = '#151515';
         ctx.fillRect(c * CELL, r * CELL, CELL, CELL);
-        ctx.strokeStyle = '#2e3248';
+        ctx.strokeStyle = '#2b2b2b';
         ctx.strokeRect(c * CELL + 0.5, r * CELL + 0.5, CELL - 1, CELL - 1);
         if (board[r][c]) drawTrainCell(ctx, c * CELL, r * CELL, CELL, board[r][c], boardEdges(r, c));
       }
@@ -1025,18 +1028,18 @@
       highscore = score;
       localStorage.setItem('shuttletetris_highscore', String(highscore));
     }
-    document.getElementById('overlay-title').textContent = 'Streckenblock! 🔴';
+    document.getElementById('overlay-title').textContent = 'Streckenblock';
     document.getElementById('overlay-text').textContent  = isNew
-      ? '🏆 Neuer Highscore: ' + score
-      : 'Score: ' + score + '  —  Highscore: ' + highscore;
-    document.getElementById('overlay-btn').textContent   = 'Neue Fahrt 🚂';
+      ? 'Neuer Highscore: ' + score
+      : 'Punkte: ' + score + '  ·  Highscore: ' + highscore;
+    document.getElementById('overlay-btn').textContent   = 'Neue Fahrt';
     overlay.classList.add('visible');
   }
 
   function togglePause() {
     if (gameOver) return;
     paused = !paused;
-    document.getElementById('btn-pause').innerHTML = paused ? '&#x25B6;' : '&#x23F8;';
+    document.getElementById('btn-pause').innerHTML = paused ? '<svg class="ico"><use href="#i-play"/></svg>' : '<svg class="ico"><use href="#i-pause"/></svg>';
     if (paused) {
       document.getElementById('overlay-title').textContent = 'Pausiert';
       document.getElementById('overlay-text').textContent  = '';
@@ -1061,7 +1064,7 @@
     next = nextFromBag();
     spawn();
     overlay.classList.remove('visible');
-    document.getElementById('btn-pause').innerHTML = '&#x23F8;';
+    document.getElementById('btn-pause').innerHTML = '<svg class="ico"><use href="#i-pause"/></svg>';
     updateStats();
     updateComboBox();
   }

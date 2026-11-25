@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>Kalendernotiz &mdash; BahnCenter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --deep:     #0f0f10;
+      --bg:       #141415;
+      --surface:  #19191b;
+      --raised:   #232325;
+      --line:     rgba(237, 237, 237, 0.08);
+      --line-2:   rgba(237, 237, 237, 0.16);
+      --text:     #ededed;
+      --text-2:   #a1a1a6;
+      --muted:    #85858b;
+      --amber:    #f5a524;
+      --on-amber: #1a1300;
+      --red:      #e5484d;
+      --ease:     cubic-bezier(0.22, 1, 0.36, 1);
+      --sans:     'IBM Plex Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --mono:     'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color-scheme: dark;
+      -webkit-font-smoothing: antialiased;
+    }
+    :focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+    .ico {
+      width: 16px; height: 16px; flex-shrink: 0;
+      fill: none; stroke: currentColor; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* ── NAV ─────────────────────────────────────────── */
+    .top-nav {
+      height: 56px; padding: 0 24px;
+      display: flex; align-items: center; gap: 12px;
+      background: var(--deep);
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; }
+    .brand-mark {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 24px; padding: 0 6px; border-radius: 4px;
+      background: var(--amber); color: var(--on-amber);
+      font: 600 13px/1 var(--mono);
+    }
+    .brand-name { font-size: 16px; font-weight: 500; }
+    .nav-sep  { color: var(--muted); }
+    .nav-page { font-size: 14px; color: var(--text-2); }
+    .back-btn {
+      margin-left: auto;
+      height: 32px; padding: 0 12px;
+      display: inline-flex; align-items: center; gap: 8px;
+      border-radius: 8px; border: 1px solid var(--line-2);
+      color: var(--text-2); text-decoration: none; font-size: 13px;
+      transition: color 150ms var(--ease), background-color 150ms var(--ease);
+    }
+    .back-btn:hover { color: var(--text); background: var(--raised); }
+
+    /* ── LAYOUT ──────────────────────────────────────── */
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 32px 16px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .page-head h1 { font-size: 24px; line-height: 1.2; font-weight: 500; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ── FELDER ──────────────────────────────────────── */
+    .field { display: flex; flex-direction: column; gap: 8px; }
+    .field label { font-size: 13px; font-weight: 500; color: var(--text-2); }
+    .field label .opt { color: var(--muted); font-weight: 400; }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .group { display: flex; flex-direction: column; gap: 8px; }
+
+    input, textarea {
+      width: 100%;
+      height: 44px;
+      background: var(--raised);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--text);
+      font: inherit; font-size: 16px;
+      padding: 0 12px;
+      outline: none;
+      transition: border-color 150ms var(--ease);
+    }
+    input:focus, textarea:focus { border-color: var(--amber); }
+    input::placeholder, textarea::placeholder { color: #5c5c61; }
+    input.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+    textarea { height: auto; min-height: 96px; padding: 12px; resize: vertical; line-height: 22px; }
+
+    .date-line { display: flex; gap: 8px; }
+    .date-line input { flex: 1; min-width: 0; font-variant-numeric: tabular-nums; }
+    .step-btn {
+      flex-shrink: 0; width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--raised); border: 1px solid var(--line); border-radius: 10px;
+      color: var(--text-2); cursor: pointer; touch-action: manipulation;
+      transition: color 150ms var(--ease), border-color 150ms var(--ease);
+    }
+    .step-btn:hover { color: var(--text); border-color: var(--line-2); }
+    .step-btn:active { transform: scale(0.97); }
+
+    .chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+    .chip {
+      height: 32px; padding: 0 4px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--text-2);
+      font: inherit; font-size: 13px;
+      cursor: pointer; touch-action: manipulation;
+      transition: color 150ms var(--ease), background-color 150ms var(--ease), border-color 150ms var(--ease);
+    }
+    .chip:hover { color: var(--text); border-color: var(--line-2); }
+    .chip.active { background: var(--raised); border-color: var(--line-2); color: var(--text); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08); }
+
+    .hint { font-size: 13px; line-height: 20px; color: var(--muted); }
+
+    .reset-btn {
+      align-self: flex-start;
+      background: none; border: none; padding: 0;
+      color: var(--muted); font: inherit; font-size: 13px; cursor: pointer;
+      text-decoration: underline; text-underline-offset: 3px;
+      transition: color 150ms var(--ease);
+    }
+    .reset-btn:hover { color: var(--text); }
+
+    /* ── ZUSAMMENFASSUNG ─────────────────────────────── */
+    .summary { display: flex; flex-direction: column; gap: 4px; }
+    .summary-title { font-size: 16px; line-height: 22px; font-weight: 500; word-break: break-word; }
+    .summary-when  { font-size: 13px; line-height: 20px; color: var(--amber); font-variant-numeric: tabular-nums; }
+    .summary-desc  {
+      margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line);
+      font-size: 14px; line-height: 20px; color: var(--text-2);
+      white-space: pre-wrap; word-break: break-word;
+    }
+    .summary-desc:empty { display: none; }
+    .section-label { font-size: 13px; color: var(--muted); }
+    .section-label b { color: var(--text-2); font-weight: 500; }
+    .more-label { margin-top: 8px; }
+
+    /* ── KALENDER-BUTTONS ────────────────────────────── */
+    .device { font-size: 13px; color: var(--muted); }
+    .device b { color: var(--text-2); font-weight: 500; }
+    /* Badges im Stil der Store-Buttons */
+    .cal-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+    .cal-btn {
+      display: flex; align-items: center; gap: 12px;
+      width: 100%; height: 56px;
+      padding: 0 16px;
+      border-radius: 10px;
+      border: 1px solid #a6a6a6;
+      background: #000;
+      color: #fff;
+      font: inherit; text-align: left; cursor: pointer;
+      touch-action: manipulation;
+      transition: border-color 150ms var(--ease), background-color 150ms var(--ease);
+    }
+    .cal-btn:hover { border-color: #fff; background: #0a0a0a; }
+    .cal-btn:active { transform: scale(0.98); }
+    .cal-btn .logo { width: 28px; height: 28px; flex-shrink: 0; fill: var(--c); }
+    .cal-btn .txt  { display: flex; flex-direction: column; min-width: 0; }
+    .cal-btn .small { font-size: 11px; line-height: 14px; color: #d0d0d0; white-space: nowrap; }
+    .cal-btn .big   { font-size: 18px; line-height: 22px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    /* Andere Geräte: gleiche Badges, etwas kleiner */
+    #cal-more .cal-btn { height: 48px; border-color: #5c5c5c; }
+    #cal-more .cal-btn:hover { border-color: #a6a6a6; }
+    #cal-more .cal-btn .logo { width: 22px; height: 22px; }
+    #cal-more .cal-btn .big { font-size: 15px; line-height: 20px; }
+
+    /* Logofarben */
+    .c-google  { --c: #4285f4; }
+    .c-apple   { --c: #ffffff; }
+    .c-android { --c: #3ddc84; }
+    .c-outlook { --c: #1490df; }
+
+    .cal-hint:empty { display: none; }
+
+    .toast {
+      position: fixed; left: 50%; bottom: 20px;
+      transform: translate(-50%, 8px);
+      background: var(--raised); color: var(--text);
+      border: 1px solid var(--line-2);
+      padding: 12px 16px; border-radius: 10px;
+      font-size: 14px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 200ms var(--ease), transform 200ms var(--ease);
+      max-width: calc(100% - 32px); text-align: center;
+    }
+    .toast.visible { opacity: 1; transform: translate(-50%, 0); }
+    .toast.err { border-color: var(--red); }
+
+    footer {
+      padding: 20px 24px; text-align: center;
+      color: var(--muted); font-size: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 560px) {
+      .top-nav { height: 52px; padding: 0 16px; }
+      .brand-name { display: none; }
+      main { padding: 20px 12px 40px; gap: 12px; }
+      .card { padding: 16px; }
+      .row-3 { grid-template-columns: 1fr 1fr; }
+      .row-3 .field:last-child { grid-column: 1 / -1; }
+    }
+    @media (max-width: 340px) {
+      .row-2, .row-3 { grid-template-columns: 1fr; }
+      .chip { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+  <!-- Markenlogos: Simple Icons (CC0) -->
+  <symbol id="l-google" viewBox="0 0 24 24"><path d="M18.316 5.684H24v12.632h-5.684V5.684zM5.684 24h12.632v-5.684H5.684V24zM18.316 5.684V0H1.895A1.894 1.894 0 0 0 0 1.895v16.421h5.684V5.684h12.632zm-7.207 6.25v-.065c.272-.144.5-.349.687-.617s.279-.595.279-.982c0-.379-.099-.72-.3-1.025a2.05 2.05 0 0 0-.832-.714 2.703 2.703 0 0 0-1.197-.257c-.6 0-1.094.156-1.481.467-.386.311-.65.671-.793 1.078l1.085.452c.086-.249.224-.461.413-.633.189-.172.445-.257.767-.257.33 0 .602.088.816.264a.86.86 0 0 1 .322.703c0 .33-.12.589-.36.778-.24.19-.535.284-.886.284h-.567v1.085h.633c.407 0 .748.109 1.02.327.272.218.407.499.407.843 0 .336-.129.614-.387.832s-.565.327-.924.327c-.351 0-.651-.103-.897-.311-.248-.208-.422-.502-.521-.881l-1.096.452c.178.616.505 1.082.977 1.401.472.319.984.478 1.538.477a2.84 2.84 0 0 0 1.293-.291c.382-.193.684-.458.902-.794.218-.336.327-.72.327-1.149 0-.429-.115-.797-.344-1.105a2.067 2.067 0 0 0-.881-.689zm2.093-1.931l.602.913L15 10.045v5.744h1.187V8.446h-.827l-2.158 1.557zM22.105 0h-3.289v5.184H24V1.895A1.894 1.894 0 0 0 22.105 0zm-3.289 23.5l4.684-4.684h-4.684V23.5zM0 22.105C0 23.152.848 24 1.895 24h3.289v-5.184H0v3.289z"/></symbol>
+  <symbol id="l-apple" viewBox="0 0 24 24"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></symbol>
+  <symbol id="l-android" viewBox="0 0 24 24"><path d="M18.4395 5.5586c-.675 1.1664-1.352 2.3318-2.0274 3.498-.0366-.0155-.0742-.0286-.1113-.043-1.8249-.6957-3.484-.8-4.42-.787-1.8551.0185-3.3544.4643-4.2597.8203-.084-.1494-1.7526-3.021-2.0215-3.4864a1.1451 1.1451 0 0 0-.1406-.1914c-.3312-.364-.9054-.4859-1.379-.203-.475.282-.7136.9361-.3886 1.5019 1.9466 3.3696-.0966-.2158 1.9473 3.3593.0172.031-.4946.2642-1.3926 1.0177C2.8987 12.176.452 14.772 0 18.9902h24c-.119-1.1108-.3686-2.099-.7461-3.0683-.7438-1.9118-1.8435-3.2928-2.7402-4.1836a12.1048 12.1048 0 0 0-2.1309-1.6875c.6594-1.122 1.312-2.2559 1.9649-3.3848.2077-.3615.1886-.7956-.0079-1.1191a1.1001 1.1001 0 0 0-.8515-.5332c-.5225-.0536-.9392.3128-1.0488.5449zm-.0391 8.461c.3944.5926.324 1.3306-.1563 1.6503-.4799.3197-1.188.0985-1.582-.4941-.3944-.5927-.324-1.3307.1563-1.6504.4727-.315 1.1812-.1086 1.582.4941zM7.207 13.5273c.4803.3197.5506 1.0577.1563 1.6504-.394.5926-1.1038.8138-1.584.4941-.48-.3197-.5503-1.0577-.1563-1.6504.4008-.6021 1.1087-.8106 1.584-.4941z"/></symbol>
+  <symbol id="l-outlook" viewBox="0 0 24 24"><path d="M7.88 12.04q0 .45-.11.87-.1.41-.33.74-.22.33-.58.52-.37.2-.87.2t-.85-.2q-.35-.21-.57-.55-.22-.33-.33-.75-.1-.42-.1-.86t.1-.87q.1-.43.34-.76.22-.34.59-.54.36-.2.87-.2t.86.2q.35.21.57.55.22.34.31.77.1.43.1.88zM24 12v9.38q0 .46-.33.8-.33.32-.8.32H7.13q-.46 0-.8-.33-.32-.33-.32-.8V18H1q-.41 0-.7-.3-.3-.29-.3-.7V7q0-.41.3-.7Q.58 6 1 6h6.5V2.55q0-.44.3-.75.3-.3.75-.3h12.9q.44 0 .75.3.3.3.3.75V10.85l1.24.72h.01q.1.07.18.18.07.12.07.25zm-6-8.25v3h3v-3zm0 4.5v3h3v-3zm0 4.5v1.83l3.05-1.83zm-5.25-9v3h3.75v-3zm0 4.5v3h3.75v-3zm0 4.5v2.03l2.41 1.5 1.34-.8v-2.73zM9 3.75V6h2l.13.01.12.04v-2.3zM5.98 15.98q.9 0 1.6-.3.7-.32 1.19-.86.48-.55.73-1.28.25-.74.25-1.61 0-.83-.25-1.55-.24-.71-.71-1.24t-1.15-.83q-.68-.3-1.55-.3-.92 0-1.64.3-.71.3-1.2.85-.5.54-.75 1.3-.25.74-.25 1.63 0 .85.26 1.56.26.72.74 1.23.48.52 1.17.81.69.3 1.56.3zM7.5 21h12.39L12 16.08V17q0 .41-.3.7-.29.3-.7.3H7.5zm15-.13v-7.24l-5.9 3.54Z"/></symbol>
+</svg>
+
+<header class="top-nav">
+  <a class="brand" href="index.html"><span class="brand-mark">BC</span><span class="brand-name">BahnCenter</span></a>
+  <span class="nav-sep">/</span>
+  <span class="nav-page">Kalendernotiz</span>
+  <a class="back-btn" href="index.html"><svg class="ico"><use href="#i-back"/></svg>&Uuml;bersicht</a>
+</header>
+
+<main>
+  <div class="page-head">
+    <h1>Kalendernotiz</h1>
+  </div>
+
+  <form class="card" id="form" autocomplete="off" onsubmit="return false">
+    <div class="group">
+      <div class="field">
+        <label for="date">Datum</label>
+        <div class="date-line">
+          <button type="button" class="step-btn" id="prev-day" aria-label="Einen Tag zur&uuml;ck"><svg class="ico"><use href="#i-left"/></svg></button>
+          <input type="date" id="date" required>
+          <button type="button" class="step-btn" id="next-day" aria-label="Einen Tag vor"><svg class="ico"><use href="#i-right"/></svg></button>
+        </div>
+      </div>
+      <div class="chips" id="quick-dates">
+        <button type="button" class="chip" data-offset="-2">Vorgestern</button>
+        <button type="button" class="chip" data-offset="-1">Gestern</button>
+        <button type="button" class="chip" data-offset="0">Heute</button>
+        <button type="button" class="chip" data-offset="1">Morgen</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="row-2">
+        <div class="field">
+          <label for="start">Beginn <span class="opt">optional</span></label>
+          <input type="time" id="start">
+        </div>
+        <div class="field">
+          <label for="end">Ende <span class="opt">optional</span></label>
+          <input type="time" id="end">
+        </div>
+      </div>
+      <p class="hint">Ohne Uhrzeit ganzt&auml;gig. Ende vor Beginn z&auml;hlt als Folgetag.</p>
+    </div>
+
+    <div class="row-3">
+      <div class="field">
+        <label for="shift">Schichtnummer</label>
+        <input type="text" class="mono" id="shift" placeholder="1204" enterkeyhint="next">
+      </div>
+      <div class="field">
+        <label for="vt">VT-Nummer</label>
+        <input type="text" class="mono" id="vt" placeholder="650 017" enterkeyhint="next">
+      </div>
+      <div class="field">
+        <label for="train">Zugnummer</label>
+        <input type="text" class="mono" id="train" inputmode="numeric" placeholder="80123" enterkeyhint="next">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="note">Bemerkung</label>
+      <textarea id="note" placeholder="Freitext"></textarea>
+    </div>
+
+    <button type="button" class="reset-btn" id="reset">Felder leeren</button>
+  </form>
+
+  <section class="card">
+    <div class="section-label">Vorschau</div>
+    <div class="summary" aria-live="polite">
+      <div class="summary-title" id="pv-title"></div>
+      <div class="summary-when" id="pv-when"></div>
+      <div class="summary-desc" id="pv-desc"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-label" id="device"></div>
+    <div class="cal-list" id="cal-primary"></div>
+    <p class="hint cal-hint" id="cal-hint"></p>
+    <div class="section-label more-label" id="more-wrap">Andere Ger&auml;te</div>
+    <div class="cal-list" id="cal-more"></div>
+  </section>
+</main>
+
+<footer>BahnCenter &middot; Ostth&uuml;ringennetz &middot; nur f&uuml;r den internen Gebrauch</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var f = {
+    date: $('date'), start: $('start'), end: $('end'),
+    shift: $('shift'), vt: $('vt'), train: $('train'), note: $('note')
+  };
+
+  /* ── Datum ─────────────────────────────────────────── */
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function toIso(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function parseIso(s) {
+    var p = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || '');
+    return p ? new Date(+p[1], +p[2] - 1, +p[3]) : null;
+  }
+  function addDays(d, n) { var c = new Date(d.getFullYear(), d.getMonth(), d.getDate()); c.setDate(c.getDate() + n); return c; }
+  function today() { var n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
+  function setDate(d) { f.date.value = toIso(d); update(); }
+  function shiftDate(n) { setDate(addDays(parseIso(f.date.value) || today(), n)); }
+
+  var longFmt  = new Intl.DateTimeFormat('de-DE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+  $('prev-day').addEventListener('click', function () { shiftDate(-1); });
+  $('next-day').addEventListener('click', function () { shiftDate(1); });
+  Array.prototype.forEach.call(document.querySelectorAll('#quick-dates .chip'), function (b) {
+    b.addEventListener('click', function () { setDate(addDays(today(), +b.dataset.offset)); });
+  });
+
+  /* ── Eintrag zusammenbauen ─────────────────────────── */
+  function val(el) { return el.value.trim(); }
+
+  function buildEvent() {
+    var d = parseIso(f.date.value);
+    if (!d) return null;
+    var shift = val(f.shift), vt = val(f.vt), train = val(f.train), note = f.note.value.trim();
+
+    var parts = [];
+    if (shift) parts.push('Schicht ' + shift);
+    if (train) parts.push('Zug ' + train);
+    if (vt)    parts.push('VT ' + vt);
+    var title = parts.length ? parts.join(' \u00B7 ') : 'Dienstnotiz';
+
+    var lines = [];
+    if (shift) lines.push('Schicht: ' + shift);
+    if (vt)    lines.push('VT: ' + vt);
+    if (train) lines.push('Zug: ' + train);
+    if (note)  { if (lines.length) lines.push(''); lines.push(note); }
+
+    var ev = {
+      title: title, desc: lines.join('\n'),
+      shift: shift, vt: vt, train: train, note: note,
+      allDay: true, start: d, end: addDays(d, 1)
+    };
+    var st = f.start.value, en = f.end.value;
+    if (st) {
+      var s = new Date(d.getFullYear(), d.getMonth(), d.getDate(), +st.slice(0, 2), +st.slice(3, 5));
+      var e;
+      if (en) {
+        e = new Date(d.getFullYear(), d.getMonth(), d.getDate(), +en.slice(0, 2), +en.slice(3, 5));
+        if (e <= s) e.setDate(e.getDate() + 1);
+      } else {
+        e = new Date(s.getTime() + 60 * 60 * 1000);
+      }
+      ev.allDay = false; ev.start = s; ev.end = e;
+    }
+    return ev;
+  }
+
+  /* Format-Helfer */
+  function ymd(d)   { return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()); }
+  function local(d) { return ymd(d) + 'T' + pad(d.getHours()) + pad(d.getMinutes()) + '00'; }
+  function isoLocal(d) { return toIso(d) + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':00'; }
+  function utcStamp(d) {
+    return d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) + 'T' +
+      pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + pad(d.getUTCSeconds()) + 'Z';
+  }
+  function hm(d) { return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+
+  /* ── Geräte-Erkennung ──────────────────────────────── */
+  var ua = navigator.userAgent || '';
+  var isIOS = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  var isAndroid = /Android/i.test(ua);
+  var isMac = !isIOS && /Macintosh|Mac OS X/.test(ua);
+  var isWin = /Windows/i.test(ua);
+  var iosNonSafari = isIOS && /CriOS|FxiOS|EdgiOS|OPiOS|GSA\/|FBAN|FBAV|Instagram|Line\//.test(ua);
+
+  var deviceName = isIOS ? 'iPhone / iPad' : isAndroid ? 'Android' : isMac ? 'Mac' : isWin ? 'Windows' : 'unbekannt';
+
+  /* ── Direkt eintragen ──────────────────────────────── */
+  function openUrl(url) {
+    var w = window.open(url, '_blank', 'noopener');
+    if (!w) location.href = url;
+  }
+
+  function googleUrl(ev) {
+    var dates = ev.allDay ? ymd(ev.start) + '/' + ymd(ev.end) : local(ev.start) + '/' + local(ev.end);
+    var p = 'action=TEMPLATE&text=' + encodeURIComponent(ev.title) + '&dates=' + dates + '&ctz=Europe%2FBerlin';
+    if (ev.desc) p += '&details=' + encodeURIComponent(ev.desc);
+    return 'https://calendar.google.com/calendar/render?' + p;
+  }
+
+  function outlookUrl(ev) {
+    var p = 'path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&subject=' + encodeURIComponent(ev.title);
+    if (ev.allDay) p += '&startdt=' + toIso(ev.start) + '&enddt=' + toIso(ev.end) + '&allday=true';
+    else p += '&startdt=' + encodeURIComponent(isoLocal(ev.start)) + '&enddt=' + encodeURIComponent(isoLocal(ev.end)) + '&allday=false';
+    if (ev.desc) p += '&body=' + encodeURIComponent(ev.desc);
+    return 'https://outlook.live.com/calendar/0/deeplink/compose?' + p;
+  }
+
+  // Android: öffnet direkt den "Neuer Termin"-Dialog der Kalender-App.
+  // Kann der Browser das nicht, springt er automatisch zu Google Kalender.
+  function androidIntent(ev) {
+    var begin, end;
+    if (ev.allDay) {
+      // Ganztägige Termine erwartet Android als UTC-Mitternacht
+      begin = Date.UTC(ev.start.getFullYear(), ev.start.getMonth(), ev.start.getDate());
+      end   = Date.UTC(ev.end.getFullYear(), ev.end.getMonth(), ev.end.getDate());
+    } else {
+      begin = ev.start.getTime(); end = ev.end.getTime();
+    }
+    var e = encodeURIComponent;
+    return 'intent:#Intent;action=android.intent.action.INSERT;type=vnd.android.cursor.dir/event;' +
+      'S.title=' + e(ev.title) + ';' +
+      (ev.desc ? 'S.description=' + e(ev.desc) + ';' : '') +
+      'l.beginTime=' + begin + ';l.endTime=' + end + ';' +
+      'B.allDay=' + (ev.allDay ? 'true' : 'false') + ';' +
+      'S.browser_fallback_url=' + e(googleUrl(ev)) + ';end';
+  }
+
+  // iPhone/iPad: Safari zeigt den Termin direkt mit "Zum Kalender hinzufügen" an,
+  // ohne dass eine Datei gespeichert wird.
+  function icsEscape(s) {
+    return s.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+  }
+  function fold(line) {
+    var out = [], cur = '', bytes = 0;
+    for (var i = 0; i < line.length; i++) {
+      var ch = line[i], code = line.charCodeAt(i);
+      if (code >= 0xD800 && code <= 0xDBFF && i + 1 < line.length) ch += line[++i];
+      var b = unescape(encodeURIComponent(ch)).length;
+      if (bytes + b > 75) { out.push(cur); cur = ' '; bytes = 1; }
+      cur += ch; bytes += b;
+    }
+    out.push(cur);
+    return out.join('\r\n');
+  }
+  function appleEvent(ev) {
+    var L = [
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//BahnCenter//Kalendernotiz//DE', 'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      'UID:' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10) + '@bahncenter',
+      'DTSTAMP:' + utcStamp(new Date())
+    ];
+    if (ev.allDay) L.push('DTSTART;VALUE=DATE:' + ymd(ev.start), 'DTEND;VALUE=DATE:' + ymd(ev.end), 'TRANSP:TRANSPARENT');
+    else L.push('DTSTART:' + local(ev.start), 'DTEND:' + local(ev.end));
+    L.push('SUMMARY:' + icsEscape(ev.title));
+    if (ev.desc) L.push('DESCRIPTION:' + icsEscape(ev.desc));
+    L.push('END:VEVENT', 'END:VCALENDAR');
+    location.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(L.map(fold).join('\r\n') + '\r\n');
+  }
+
+  var TARGETS = {
+    google:  { name: 'Google Kalender', sub: 'alle Ger\u00E4te',
+               run: function (ev) { openUrl(googleUrl(ev)); } },
+    apple:   { name: 'Apple Kalender', sub: 'iPhone & iPad',
+               run: function (ev) {
+                 if (!isIOS) { toast('Apple Kalender geht nur direkt auf dem iPhone oder iPad', true); return; }
+                 appleEvent(ev);
+               } },
+    android: { name: 'Android-Kalender', sub: 'Android-Handy',
+               run: function (ev) {
+                 if (!isAndroid) { toast('Android-Kalender geht nur direkt auf dem Android-Handy', true); return; }
+                 location.href = androidIntent(ev);
+               } },
+    outlook: { name: 'Outlook.com', sub: 'alle Ger\u00E4te',
+               run: function (ev) { openUrl(outlookUrl(ev)); } }
+  };
+
+  var primary;
+  if (isIOS)          primary = ['apple'];
+  else if (isAndroid) primary = ['android', 'google'];
+  else if (isWin)     primary = ['google', 'outlook'];
+  else                primary = ['google'];
+  var order = {
+    primary: primary,
+    more: ['google', 'apple', 'android', 'outlook'].filter(function (k) { return primary.indexOf(k) < 0; })
+  };
+
+  function makeBtn(key, primary, alt) {
+    var t = TARGETS[key];
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'cal-btn c-' + key + (alt ? '' : ' primary');
+    b.setAttribute('aria-label', 'In ' + t.name + ' eintragen');
+    var NS = 'http://www.w3.org/2000/svg';
+    var logo = document.createElementNS(NS, 'svg');
+    logo.setAttribute('class', 'logo'); logo.setAttribute('aria-hidden', 'true');
+    var use = document.createElementNS(NS, 'use');
+    use.setAttribute('href', '#l-' + key);
+    logo.appendChild(use);
+    var txt = document.createElement('span'); txt.className = 'txt';
+    var sm = document.createElement('span'); sm.className = 'small';
+    sm.textContent = alt ? 'Für ' + t.sub : 'Eintragen in';
+    var big = document.createElement('span'); big.className = 'big'; big.textContent = t.name;
+    txt.appendChild(sm); txt.appendChild(big);
+    b.appendChild(logo); b.appendChild(txt);
+    b.addEventListener('click', function () {
+      var ev = buildEvent();
+      if (!ev) { toast('Bitte ein g\u00FCltiges Datum w\u00E4hlen', true); f.date.focus(); return; }
+      t.run(ev);
+    });
+    return b;
+  }
+  order.primary.forEach(function (k, i) { $('cal-primary').appendChild(makeBtn(k, i === 0)); });
+  order.more.forEach(function (k) { $('cal-more').appendChild(makeBtn(k, false, true)); });
+  if (!order.more.length) $('more-wrap').hidden = true;
+
+  $('device').innerHTML = 'Erkanntes Ger\u00E4t: <b></b>';
+  $('device').querySelector('b').textContent = deviceName;
+  $('cal-hint').textContent = iosNonSafari
+    ? 'Apple Kalender klappt nur in Safari. In Chrome oder App-Browsern die Seite bitte in Safari \u00F6ffnen oder Google Kalender nehmen.'
+    : isMac
+      ? 'Apple Kalender am Mac: Google oder Outlook nehmen, wenn das Konto dort verbunden ist.'
+      : '';
+
+  /* ── Vorschau ──────────────────────────────────────── */
+  function update() {
+    var d = parseIso(f.date.value);
+    var t = today();
+    Array.prototype.forEach.call(document.querySelectorAll('#quick-dates .chip'), function (b) {
+      b.classList.toggle('active', !!d && toIso(addDays(t, +b.dataset.offset)) === toIso(d));
+    });
+    var ev = buildEvent();
+    if (!ev) {
+      $('pv-title').textContent = 'Bitte ein Datum w\u00E4hlen';
+      $('pv-when').textContent = '';
+      $('pv-desc').textContent = '';
+      return;
+    }
+    $('pv-title').textContent = ev.title;
+    $('pv-desc').textContent = ev.desc;
+    $('pv-when').textContent = longFmt.format(ev.start) + ' \u00B7 ' + (ev.allDay ? 'ganzt\u00E4gig'
+      : hm(ev.start) + '\u2013' + hm(ev.end) + ' Uhr' + (toIso(ev.end) !== toIso(ev.start) ? ' (+1 Tag)' : ''));
+  }
+  Object.keys(f).forEach(function (k) { f[k].addEventListener('input', update); });
+
+  $('reset').addEventListener('click', function () {
+    ['start', 'end', 'shift', 'vt', 'train', 'note'].forEach(function (k) { f[k].value = ''; });
+    setDate(today());
+  });
+
+  ['shift', 'vt', 'train'].forEach(function (k, i, arr) {
+    f[k].addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); (arr[i + 1] ? f[arr[i + 1]] : f.note).focus(); }
+    });
+  });
+
+  /* ── Toast ─────────────────────────────────────────── */
+  var toastTimer;
+  function toast(msg, err) {
+    var el = $('toast');
+    el.textContent = msg;
+    el.classList.toggle('err', !!err);
+    el.classList.add('visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove('visible'); }, 3200);
+  }
+
+  setDate(today());
+})();
+</script>
+
+</body>
+</html>

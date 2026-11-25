@@ -4,352 +4,333 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-  <title>BahnCenter &mdash; Ostthüringennetz</title>
+  <title>BahnCenter &mdash; Ostth&uuml;ringennetz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:       #0f1117;
-      --surface:  #1a1d27;
-      --surface2: #222535;
-      --border:   #2e3248;
-      --green:    #3b82f6;
-      --red:      #f59e0b;
-      --purple:   #7c3aed;
-      --text:     #e8eaf0;
-      --muted:    #8b90a8;
+      --deep:     #0f0f10;
+      --bg:       #141415;
+      --surface:  #19191b;
+      --raised:   #232325;
+      --line:     rgba(237, 237, 237, 0.08);
+      --line-2:   rgba(237, 237, 237, 0.16);
+      --text:     #ededed;
+      --text-2:   #a1a1a6;
+      --muted:    #85858b;
+      --amber:    #f5a524;
+      --on-amber: #1a1300;
+      --ease:     cubic-bezier(0.22, 1, 0.36, 1);
+      --sans:     'IBM Plex Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --mono:     'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+      --rb13: #13a538; --rb22: #f39200; --re12: #ec6608; --rb21: #e30613;
+      --re21: #2e9fff; --rb23: #0097d7; --rb26: #365c17; --rb27: #3cb85a;
+      --rb32: #e30613; --rb76: #832c87; --rb46: #13a538;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: var(--sans);
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+    :focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+    .ico {
+      width: 16px; height: 16px; flex-shrink: 0;
+      fill: none; stroke: currentColor; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
     }
 
-    .site-header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0.6rem 1.5rem;
-      min-height: 52px;
+    /* ── NAV ─────────────────────────────────────────── */
+    .top-nav {
+      height: 56px;
+      padding: 0 24px;
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 12px;
+      background: var(--deep);
+      border-bottom: 1px solid var(--line);
     }
-    .logo-eb {
-      font-size: 1.5rem;
-      font-weight: 900;
-      background: linear-gradient(to right, var(--green), #7c3aed);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: -1.5px;
-      line-height: 1;
+    .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; }
+    .brand-mark {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 24px; padding: 0 6px; border-radius: 4px;
+      background: var(--amber); color: var(--on-amber);
+      font: 600 13px/1 var(--mono);
     }
-    .logo-dot {
-      width: 8px; height: 8px;
-      background: var(--red);
-      border-radius: 50%;
-      margin-bottom: 3px;
-      flex-shrink: 0;
+    .brand-name { font-size: 16px; font-weight: 500; }
+    .nav-link {
+      margin-left: auto;
+      height: 32px; padding: 0 12px;
+      display: inline-flex; align-items: center; gap: 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(46, 159, 255, 0.45);
+      background: rgba(46, 159, 255, 0.12);
+      color: #7cc0ff; text-decoration: none; font-size: 13px; font-weight: 500;
+      transition: background-color 150ms var(--ease), border-color 150ms var(--ease);
     }
-    .site-name  { font-size: 0.95rem; font-weight: 600; }
-    .site-sub   { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+    .nav-link:hover { background: rgba(46, 159, 255, 0.22); border-color: var(--re21); }
 
+    /* ── MAIN ────────────────────────────────────────── */
     main {
       flex: 1;
+      width: 100%;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 64px 24px 80px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 3rem 1.5rem;
-      gap: 2.5rem;
+      gap: 40px;
     }
-
-    .portal-heading { text-align: center; }
-    .portal-heading h1 {
-      font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.5rem;
-    }
-    .portal-heading h1 span {
-      background: linear-gradient(to right, var(--green), #7c3aed);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .portal-heading p { color: var(--muted); font-size: 0.95rem; }
-
-    .pill-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      margin-top: 0.9rem;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--muted);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 0.4rem 1rem;
-      text-decoration: none;
-      transition: color 0.15s, border-color 0.15s;
-    }
-    .pill-link:hover {
-      color: var(--text);
-      border-color: var(--green);
-    }
+    .intro h1 { font-size: 32px; line-height: 1.15; font-weight: 500; }
+    .intro p  { margin-top: 8px; font-size: 16px; line-height: 24px; color: var(--text-2); max-width: 36rem; }
 
     .app-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1.25rem;
-      width: 100%;
-      max-width: 700px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
     }
 
     .app-card {
       background: var(--surface);
-      border: 1px solid var(--border);
+      border: 1px solid var(--line);
       border-radius: 16px;
-      padding: 2rem 1.75rem;
+      padding: 24px;
       text-decoration: none;
       color: inherit;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 16px;
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
       position: relative;
       overflow: hidden;
-      cursor: pointer;
-      transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+      transition: border-color 150ms var(--ease), background-color 150ms var(--ease);
     }
+    /* Farbstreifen oben in der Linienfarbe */
     .app-card::before {
       content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      border-radius: 16px 16px 0 0;
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--tint);
     }
-    .app-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
-    }
-    .app-card.bingo::before { background: var(--green); }
-    .app-card.bingo:hover   { border-color: var(--green); }
-    .app-card.codes::before { background: var(--red); }
-    .app-card.codes:hover   { border-color: var(--red); }
-    .app-card.tetris::before { background: var(--purple); }
-    .app-card.tetris:hover   { border-color: var(--purple); }
-    .app-card.games::before { background: linear-gradient(to right, var(--green), var(--purple)); }
-    .app-card.games:hover   { border-color: var(--purple); }
+    .app-card:hover { border-color: color-mix(in srgb, var(--tint) 60%, transparent); background: #1c1c1e; }
+    .app-card:active { transform: scale(0.99); }
 
-    .card-icon  { font-size: 2.5rem; line-height: 1; }
-    .card-title-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-    .card-title { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.3px; }
-    .app-card.bingo .card-title { color: var(--green); }
-    .app-card.codes .card-title { color: var(--red); }
-    .app-card.tetris .card-title { color: var(--purple); }
-    .app-card.games .card-title {
-      background: linear-gradient(to right, var(--green), var(--purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .card-tile {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--tint);
+      color: var(--ink);
     }
-    .card-version {
-      font-size: 0.7rem; font-weight: 700; color: var(--muted);
-      background: var(--surface2); border: 1px solid var(--border);
-      border-radius: 999px; padding: 0.1rem 0.55rem;
+    .card-tile .ico { width: 20px; height: 20px; }
+    .card-head { display: flex; align-items: baseline; gap: 8px; }
+    .card-title { font-size: 18px; font-weight: 500; }
+    .card-meta  { font: 400 12px/16px var(--mono); color: var(--muted); }
+    .card-desc  { font-size: 14px; line-height: 22px; color: var(--text-2); flex: 1; }
+    /* Der eigentliche Button der Kachel, in der Linienfarbe */
+    .card-foot {
+      align-self: flex-start;
+      height: 40px; padding: 0 16px;
+      display: inline-flex; align-items: center; gap: 8px;
+      border-radius: 10px;
+      background: var(--tint);
+      color: var(--ink);
+      font-size: 14px; font-weight: 600;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      transition: filter 150ms var(--ease);
+    }
+    .app-card:hover .card-foot { filter: brightness(1.1); }
+    .app-card:hover .card-foot .ico { transform: translateX(2px); }
+    .card-foot .ico { transition: transform 150ms var(--ease); }
+
+    .t-games  { --tint: #9b3aa0; --ink: #fff; }
+    .t-codes  { --tint: var(--rb22); --ink: #1f1300; }
+    .t-cal    { --tint: #0e8a2e; --ink: #fff; }
+    .t-bingo  { --tint: var(--amber); --ink: var(--on-amber); }
+    .t-tetris { --tint: #1f7ae0; --ink: #fff; }
+
+    /* Linienschilder */
+    .lines { display: flex; flex-wrap: wrap; gap: 4px; }
+    .line-tag {
+      height: 20px; padding: 0 6px; border-radius: 4px;
+      display: inline-flex; align-items: center;
+      font: 500 11px/1 var(--mono); color: #fff;
+      background: var(--c);
     }
 
-    .card-desc {
-      font-size: 0.88rem; color: var(--muted); line-height: 1.55; flex: 1;
-    }
-    .card-arrow {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      font-size: 0.82rem; font-weight: 600; color: var(--muted);
-      transition: color 0.15s, gap 0.15s;
-    }
-    .app-card:hover .card-arrow            { gap: 0.65rem; }
-    .app-card.bingo:hover .card-arrow      { color: var(--green); }
-    .app-card.codes:hover  .card-arrow     { color: var(--red); }
-    .app-card.tetris:hover .card-arrow     { color: var(--purple); }
-    .app-card.games:hover .card-arrow      { color: var(--purple); }
-
-    /* MODAL */
+    /* ── MODAL ───────────────────────────────────────── */
     .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(8, 9, 14, 0.72);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 1.25rem;
-      z-index: 1000;
+      position: fixed; inset: 0;
+      background: rgba(0, 0, 0, 0.72);
+      display: none; align-items: center; justify-content: center;
+      padding: 16px; z-index: 1000;
     }
     .modal-overlay.visible { display: flex; }
     .modal {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.5rem;
-      width: 100%;
-      max-width: 640px;
-      max-height: 90vh;
+      border: 1px solid var(--line-2);
+      border-radius: 20px;
+      padding: 24px;
+      width: 100%; max-width: 640px; max-height: 90vh;
       overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
+      display: flex; flex-direction: column; gap: 20px;
+      animation: rise 300ms var(--ease);
     }
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-    .modal-header h2 {
-      font-size: 1.25rem; font-weight: 800; letter-spacing: -0.3px;
-    }
+    @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .modal-header h2 { font-size: 20px; font-weight: 500; }
     .modal-close {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      border-radius: 8px;
-      width: 36px; height: 36px;
-      flex-shrink: 0;
-      font-size: 1rem;
-      line-height: 1;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: color 0.15s, border-color 0.15s;
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--raised); border: 1px solid var(--line);
+      color: var(--text-2); cursor: pointer;
+      transition: color 150ms var(--ease), border-color 150ms var(--ease);
     }
-    .modal-close:hover { color: var(--text); border-color: var(--muted); }
-    .modal-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-    }
-    .modal-grid .app-card { padding: 1.5rem 1.5rem; }
-    .modal-grid .app-card:hover { transform: none; }
+    .modal-close:hover { color: var(--text); border-color: var(--line-2); }
+    .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .modal-grid .app-card { background: var(--raised); border-radius: 12px; padding: 20px; }
 
     footer {
-      text-align: center;
-      padding: 1.25rem;
+      padding: 20px 24px;
       color: var(--muted);
-      font-size: 0.75rem;
-      border-top: 1px solid var(--border);
+      font-size: 12px;
+      border-top: 1px solid var(--line);
+      text-align: center;
     }
-    footer span { color: var(--green); font-weight: 600; }
 
-    @media (max-width: 480px) {
-      .site-header { padding: 0.5rem 1rem; min-height: 46px; }
-      .logo-eb { font-size: 1.2rem; }
-      .site-header > span:first-child { font-size: 1.2rem !important; }
-      .site-sub { display: none; }
-      main { padding: 2rem 1rem; }
-      .portal-heading h1 { font-size: 1.5rem; }
-      .app-card { padding: 1.25rem 1.25rem; }
-      .card-title { font-size: 1.1rem; }
-      .card-icon { font-size: 2rem; }
-      .modal { padding: 1.1rem; border-radius: 12px; gap: 1rem; }
-      .modal-header h2 { font-size: 1.05rem; }
-      .modal-grid .app-card { padding: 1.25rem 1.25rem; }
+    @media (max-width: 860px) {
+      .app-grid { grid-template-columns: 1fr 1fr; }
     }
-    @media (max-width: 360px) {
-      .logo-dot { display: none; }
-      .app-grid { grid-template-columns: 1fr; }
+    @media (max-width: 560px) {
+      .top-nav { height: 52px; padding: 0 16px; }
+      main { padding: 40px 16px 48px; gap: 32px; }
+      .intro h1 { font-size: 28px; }
+      .app-grid, .modal-grid { grid-template-columns: 1fr; }
+      .app-card { padding: 20px; }
+      .modal { padding: 20px; border-radius: 16px; }
     }
   </style>
 </head>
 <body>
 
-<header class="site-header">
-  <span style="font-size:1.5rem;line-height:1;">🚂</span><span class="logo-eb">BC</span>
-  <span class="logo-dot"></span>
-  <div>
-    <div class="site-name">BahnCenter</div>
-    <div class="site-sub">Ostth&uuml;ringennetz &mdash; Intern</div>
-  </div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-games" viewBox="0 0 24 24"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/></symbol>
+  <symbol id="i-train" viewBox="0 0 24 24"><path d="M8 3.1V7a4 4 0 0 0 8 0V3.1"/><path d="m9 15-1-1"/><path d="m15 15 1-1"/><path d="M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5Z"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M10 16h4"/><path d="M12 14v4"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></symbol>
+  <symbol id="i-blocks" viewBox="0 0 24 24"><rect width="7" height="7" x="14" y="3" rx="1"/><path d="M10 21V8a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H3"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+</svg>
+
+<header class="top-nav">
+  <a class="brand" href="index.html"><span class="brand-mark">BC</span><span class="brand-name">BahnCenter</span></a>
+  <a class="nav-link" href="https://bahn.expert/" target="_blank" rel="noopener">bahn.expert <svg class="ico"><use href="#i-ext"/></svg></a>
 </header>
 
 <main>
-  <div class="portal-heading">
-    <h1>Willkommen im 🚂<span>BahnCenter</span></h1>
-    <p>W&auml;hle eine App um loszulegen</p>
-    <a class="pill-link" href="https://bahn.expert/" target="_blank" rel="noopener">&#x1F50D; bahn.expert</a>
+  <div class="intro">
+    <h1>BahnCenter</h1>
+    <p>Werkzeuge f&uuml;r TF und ZUB im Ostth&uuml;ringennetz</p>
   </div>
 
   <div class="app-grid">
 
-    <div class="app-card games" role="button" tabindex="0" id="games-card">
-      <div class="card-icon">&#x1F3AE;</div>
-      <div class="card-title-row">
-        <div class="card-title">Bahnspiele</div>
-        <span class="card-version">2 Spiele</span>
-      </div>
-      <div class="card-desc">
-        Kurzweil f&uuml;r die Pause &mdash; Eisenbahnerbingo
-        und Shuttletetris im Bahn-Design.
-      </div>
-      <div class="card-arrow">Spiele &ouml;ffnen &#x2192;</div>
-    </div>
-
-    <a class="app-card codes" href="liniencodes.html">
-      <div class="card-icon">&#x1F686;</div>
-      <div class="card-title-row">
+    <a class="app-card t-codes" href="liniencodes.html">
+      <div class="card-tile"><svg class="ico"><use href="#i-train"/></svg></div>
+      <div class="card-head">
         <div class="card-title">Liniencodes OTN</div>
-        <span class="card-version">V.1</span>
+        <span class="card-meta">Stand 02/2026</span>
       </div>
       <div class="card-desc">
-        FIS-Taufe im Offlinemodus &mdash; alle Liniencodes, Zugzielliste
-        und FIS-Tastenbelegung f&uuml;r das Ostth&uuml;ringennetz. Stand 02/2026.
+        FIS-Taufe im Offlinemodus: Liniencodes, Zugzielliste und FIS-Tastenbelegung.
       </div>
-      <div class="card-arrow">Zur App &#x2192;</div>
+      <div class="lines" aria-hidden="true">
+        <span class="line-tag" style="--c:var(--rb13)">RB13</span>
+        <span class="line-tag" style="--c:var(--rb21)">RB21</span>
+        <span class="line-tag" style="--c:var(--rb22)">RB22</span>
+        <span class="line-tag" style="--c:var(--re12)">RE12</span>
+        <span class="line-tag" style="--c:var(--re21)">RE21</span>
+        <span class="line-tag" style="--c:var(--rb23)">RB23</span>
+        <span class="line-tag" style="--c:var(--rb26)">RB26</span>
+        <span class="line-tag" style="--c:var(--rb27)">RB27</span>
+        <span class="line-tag" style="--c:var(--rb76)">RB76</span>
+      </div>
+      <div class="card-foot">Liniencodes &ouml;ffnen <svg class="ico"><use href="#i-arrow"/></svg></div>
     </a>
+
+    <a class="app-card t-cal" href="kalender.html">
+      <div class="card-tile"><svg class="ico"><use href="#i-cal"/></svg></div>
+      <div class="card-head">
+        <div class="card-title">Kalendernotiz</div>
+        <span class="card-meta">V.1</span>
+      </div>
+      <div class="card-desc">
+        Schicht, VT, Zugnummer und Bemerkung direkt in Google, Apple, Android oder Outlook eintragen.
+      </div>
+      <div class="card-foot">Notiz anlegen <svg class="ico"><use href="#i-arrow"/></svg></div>
+    </a>
+
+    <button type="button" class="app-card t-games" id="games-card">
+      <div class="card-tile"><svg class="ico"><use href="#i-games"/></svg></div>
+      <div class="card-head">
+        <div class="card-title">Bahnspiele</div>
+        <span class="card-meta">2 Spiele</span>
+      </div>
+      <div class="card-desc">
+        F&uuml;r die Pause: Eisenbahnerbingo und Shuttletetris.
+      </div>
+      <div class="card-foot">Spiele ansehen <svg class="ico"><use href="#i-arrow"/></svg></div>
+    </button>
 
   </div>
 </main>
 
-<div class="modal-overlay" id="games-modal">
+<div class="modal-overlay" id="games-modal" role="dialog" aria-modal="true" aria-labelledby="games-title">
   <div class="modal">
     <div class="modal-header">
-      <h2>&#x1F3AE; Bahnspiele</h2>
-      <button class="modal-close" id="modal-close" aria-label="Schlie&szlig;en">&#x2715;</button>
+      <h2 id="games-title">Bahnspiele</h2>
+      <button class="modal-close" id="modal-close" aria-label="Schlie&szlig;en"><svg class="ico"><use href="#i-x"/></svg></button>
     </div>
     <div class="modal-grid">
 
-      <a class="app-card bingo" href="bingo.html">
-        <div class="card-icon">&#x1F3B0;</div>
-        <div class="card-title-row">
+      <a class="app-card t-bingo" href="bingo.html">
+        <div class="card-tile"><svg class="ico"><use href="#i-grid"/></svg></div>
+        <div class="card-head">
           <div class="card-title">Eisenbahnerbingo</div>
-          <span class="card-version">V.1.1</span>
+          <span class="card-meta">V.1.1</span>
         </div>
         <div class="card-desc">
-          Interaktives Bingo f&uuml;r TF und ZUB &mdash;
-          zuf&auml;llige Karten, anklicken, drucken oder als Bild speichern.
+          Bingo f&uuml;r TF und ZUB mit zuf&auml;lligen Karten. Ankreuzen, drucken oder als Bild speichern.
         </div>
-        <div class="card-arrow">Zur App &#x2192;</div>
+        <div class="card-foot">Bingo spielen <svg class="ico"><use href="#i-arrow"/></svg></div>
       </a>
 
-      <a class="app-card tetris" href="tetris.html">
-        <div class="card-icon">&#x1F684;</div>
-        <div class="card-title-row">
+      <a class="app-card t-tetris" href="tetris.html">
+        <div class="card-tile"><svg class="ico"><use href="#i-blocks"/></svg></div>
+        <div class="card-head">
           <div class="card-title">Shuttletetris</div>
-          <span class="card-version">V.0.1</span>
+          <span class="card-meta">V.0.1</span>
         </div>
         <div class="card-desc">
-          Klassisches Tetris mit Bahn-Flair &mdash;
-          f&auml;llende Shuttle-Bl&ouml;cke (RS1, FLIRT &amp; Co.), Reihen r&auml;umen, Highscore knacken.
+          Tetris mit Shuttle-Bl&ouml;cken wie RS1 und FLIRT. Reihen r&auml;umen, Highscore knacken.
         </div>
-        <div class="card-arrow">Zur App &#x2192;</div>
+        <div class="card-foot">Tetris spielen <svg class="ico"><use href="#i-arrow"/></svg></div>
       </a>
 
     </div>
   </div>
 </div>
 
-<footer>
-  <span>BC</span> BahnCenter &mdash; Ostth&uuml;ringennetz &mdash; Nur f&uuml;r den internen Gebrauch
-</footer>
+<footer>BahnCenter &middot; Ostth&uuml;ringennetz &middot; nur f&uuml;r den internen Gebrauch</footer>
 
 <script>
   var modal = document.getElementById('games-modal');
@@ -359,24 +340,18 @@
   function openModal() {
     modal.classList.add('visible');
     document.body.style.overflow = 'hidden';
+    closeBtn.focus();
   }
   function closeModal() {
     modal.classList.remove('visible');
     document.body.style.overflow = '';
+    gamesCard.focus();
   }
 
   gamesCard.addEventListener('click', openModal);
-  gamesCard.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      openModal();
-    }
-  });
   closeBtn.addEventListener('click', closeModal);
-  modal.addEventListener('click', function(e) {
-    if (e.target === modal) closeModal();
-  });
-  document.addEventListener('keydown', function(e) {
+  modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && modal.classList.contains('visible')) closeModal();
   });
 </script>
