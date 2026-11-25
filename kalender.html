@@ -500,7 +500,12 @@
     L.push('SUMMARY:' + icsEscape(ev.title));
     if (ev.desc) L.push('DESCRIPTION:' + icsEscape(ev.desc));
     L.push('END:VEVENT', 'END:VCALENDAR');
-    location.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(L.map(fold).join('\r\n') + '\r\n');
+    // Safari blockiert data:-Links; ein Blob mit text/calendar im selben Tab
+    // öffnet dagegen den "Zum Kalender hinzufügen"-Dialog.
+    var blob = new Blob([L.map(fold).join('\r\n') + '\r\n'], { type: 'text/calendar;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    location.href = url;
+    setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
   }
 
   var TARGETS = {
